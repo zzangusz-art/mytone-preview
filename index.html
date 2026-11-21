@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내말투 상담 — 체험판</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="통화 말투를 측정해 그 말투로 학부모 상담 글을 쓰는 프로그램의 화면 체험판(샘플 데이터)">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#fffdf9; --ink:#23211d; --sub:#6d675d; --line:#e2ddd2; --accent:#2f5d50; --accent-ink:#fff;
+  --soft:#e9efe9; --warn:#a4541f; --warn-bg:#fbf0e3; --bad:#a3312b; --bad-bg:#fbeceb; --t:#2f5d50; --p:#8a7f6d;
+  --radius:12px; --shadow:0 1px 2px rgba(40,35,25,.06),0 4px 14px rgba(40,35,25,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#191815;--card:#22201c;--ink:#ece8df;--sub:#a59f93;--line:#37342e;--accent:#7fbfa9;--accent-ink:#10231d;
+    --soft:#26302b;--warn:#e0a167;--warn-bg:#33291d;--bad:#e58c85;--bad-bg:#352120;--t:#7fbfa9;--p:#a59f93;--shadow:none}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 "Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;word-break:keep-all}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--card)}
+h1{font-size:18px;margin:0;letter-spacing:-.2px}
+h1 small{font-weight:400;color:var(--sub);font-size:13px;margin-left:6px}
+h2{font-size:16px;margin:0 0 10px}
+h3{font-size:14px;margin:18px 0 6px;color:var(--sub);font-weight:600}
+main{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:99px;font-size:12px;background:var(--soft);color:var(--accent);white-space:nowrap}
+.chip.warn{background:var(--warn-bg);color:var(--warn)} .chip.bad{background:var(--bad-bg);color:var(--bad)}
+.spacer{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.tabs{display:flex;gap:4px;margin:0 0 14px;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;color:var(--sub);padding:9px 14px;border-radius:9px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--card);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+button.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:9px;font:inherit;cursor:pointer}
+button.btn:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button.small{padding:4px 10px;font-size:13px}
+button.link{border:0;background:none;color:var(--accent);padding:0;font:inherit;cursor:pointer;text-decoration:underline}
+button:disabled{opacity:.5;cursor:default}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+textarea{min-height:92px;resize:vertical;line-height:1.65}
+label{display:block;font-size:13px;color:var(--sub);margin:10px 0 4px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.muted{color:var(--sub);font-size:13px}
+.note{background:var(--soft);border-radius:9px;padding:10px 12px;font-size:13px;margin:10px 0}
+.note.warn{background:var(--warn-bg);color:var(--warn)} .note.bad{background:var(--bad-bg);color:var(--bad)}
+.drop{border:2px dashed var(--line);border-radius:var(--radius);padding:26px;text-align:center;color:var(--sub);cursor:pointer}
+.drop.over{border-color:var(--accent);background:var(--soft)}
+.rec{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--line)}
+.rec b{font-weight:600}
+.units{margin:8px 0 4px;border:1px solid var(--line);border-radius:9px;max-height:420px;overflow:auto}
+.unit{display:flex;gap:8px;align-items:flex-start;padding:6px 10px;border-top:1px solid var(--line)}
+.unit:first-child{border-top:0}
+.unit.unsure{background:var(--warn-bg)}
+.unit.del{opacity:.35;text-decoration:line-through}
+.who{flex:none;width:58px;text-align:center;border-radius:99px;border:1px solid var(--line);font-size:12px;padding:2px 0;cursor:pointer;background:var(--card);color:var(--p)}
+.who.T{background:var(--t);border-color:var(--t);color:var(--accent-ink);font-weight:600}
+.unit .txt{flex:1}
+.unit .x{flex:none;border:0;background:none;color:var(--sub);cursor:pointer;font-size:15px}
+.bars{display:grid;grid-template-columns:auto 1fr auto;gap:5px 10px;align-items:center;font-size:13px}
+.bar{height:9px;border-radius:9px;background:var(--accent);min-width:2px}
+ul.plain{margin:6px 0;padding-left:18px} ul.plain li{margin:3px 0}
+.ex{padding:7px 0;border-top:1px solid var(--line);font-size:14px} .ex:first-child{border-top:0}
+.tag{font-size:12px;color:var(--accent);background:var(--soft);padding:1px 7px;border-radius:99px;margin-right:6px;white-space:nowrap}
+.score{display:inline-flex;align-items:baseline;gap:6px;font-weight:700;font-size:20px}
+.score small{font-weight:500;font-size:13px;color:var(--sub)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-wrap:wrap}
+.seg button{border:0;background:var(--card);color:var(--sub);padding:7px 12px;font:inherit;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--accent);color:var(--accent-ink);font-weight:600}
+.hide{display:none!important}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;z-index:9;max-width:90vw}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <h1>내말투 상담 <small>내 통화 말투로 쓰는 학부모 상담 글</small></h1>
+  <span class="spacer"></span>
+  <span id="chipStt" class="chip">음성 인식 확인 중</span>
+  <span id="chipLlm" class="chip">글쓰기 엔진 확인 중</span>
+  <span id="who" class="muted"></span>
+  <button id="btnLogout" class="btn small hide">로그아웃</button>
+</header>
+
+<main>
+<!-- 로그인 / 가입 -->
+<section id="viewAuth" class="hide">
+  <div class="card" style="max-width:460px;margin:30px auto">
+    <div class="seg" id="authSeg" style="margin-bottom:8px">
+      <button data-v="login" class="on">로그인</button><button data-v="signup">처음이에요(가입)</button>
+    </div>
+    <label>아이디</label><input id="aId" autocomplete="username" placeholder="한글·영문·숫자 3~20자">
+    <label>비밀번호(PIN, 숫자 4~8자리)</label><input id="aPin" type="password" inputmode="numeric" autocomplete="current-password">
+    <div id="signupExtra" class="hide">
+      <label>이름(글에 들어가는 이름)</label><input id="aName" placeholder="예: 김도윤">
+      <div class="row">
+        <div><label>역할</label><select id="aRole"></select></div>
+        <div><label>소속(선택)</label><input id="aOrg" placeholder="예: ○○중학교, ○○수학학원"></div>
+        <div><label>담당(선택)</label><input id="aGrade" placeholder="예: 2학년 3반, 중등 수학"></div>
+      </div>
+      <div id="inviteWrap" class="hide"><label>초대 코드</label><input id="aInvite"></div>
+    </div>
+    <p id="authErr" class="note bad hide"></p>
+    <p style="margin-top:14px"><button id="btnAuth" class="btn primary" style="width:100%">로그인</button></p>
+    <p class="muted">선생님마다 계정이 따로이고, 통화 기록과 말투는 본인만 볼 수 있습니다.</p>
+  </div>
+</section>
+
+<section id="viewApp" class="hide">
+  <nav class="tabs" id="tabs">
+    <button data-t="voice" class="on">① 내 말투 등록</button>
+    <button data-t="card">② 말투 카드</button>
+    <button data-t="write">③ 상담 글 만들기</button>
+    <button data-t="set">설정</button>
+  </nav>
+
+  <!-- ① 내 말투 등록 -->
+  <div id="tab-voice">
+    <div class="card">
+      <h2>통화 녹음 올리기</h2>
+      <p class="muted">학부모와 통화한 녹음 3개 정도면 충분합니다(각 3분 이상 권장). 서로 다른 내용의 통화일수록 좋아요.</p>
+      <div id="drop" class="drop">
+        <p style="margin:0 0 10px">통화 녹음 파일을 여기에 끌어다 놓으세요</p>
+        <button id="btnPick" class="btn primary" type="button">녹음 파일 첨부</button>
+        <p class="muted" style="margin:10px 0 0">여러 개를 한 번에 올릴 수 있습니다 · m4a · mp3 · wav · aac · amr · 3gp · 3ga · ogg</p>
+        <p id="upState" class="muted hide" style="margin:8px 0 0"></p>
+      </div>
+      <input id="file" type="file" accept="audio/*,.m4a,.mp3,.wav,.aac,.amr,.3gp,.3ga,.ogg,.opus,.flac,.mp4,.mov,.webm,.wma,.caf" multiple class="hide">
+      <label>이 통화들에 나오는 학생 이름(선택 · 쉼표로 구분) — 분석할 때 이름을 가립니다. 비워 두면 자동으로 찾습니다.</label>
+      <input id="names" placeholder="예: 민준, 서연">
+      <p class="note">녹음은 이 서버 안에서만 글로 옮기고, <b id="keepAudioText">옮긴 뒤 원본 음성은 바로 지웁니다.</b> 말투 분석에는 선생님 발화만 쓰고 학부모 발화는 쓰지 않습니다.</p>
+      <p><button id="btnPasteToggle" class="link">이미 글로 된 통화 기록이 있나요? (클로바노트 등) 붙여넣기</button></p>
+      <div id="pasteBox" class="hide">
+        <textarea id="pasteText" placeholder="교사: 어머님 안녕하세요…&#10;학부모: 네 선생님…&#10;&#10;'참석자 1 / 참석자 2' 형식도 됩니다."></textarea>
+        <p><button id="btnPaste" class="btn small">이 글 추가</button></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>올린 통화 <span id="recCount" class="muted"></span></h2>
+      <div id="recList"><p class="muted">아직 올린 통화가 없습니다.</p></div>
+      <p style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <button id="btnBuild" class="btn primary" disabled>내 말투 분석하기</button>
+        <span id="buildHint" class="muted">통화를 1개 이상 올리면 분석할 수 있습니다.</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- ② 말투 카드 -->
+  <div id="tab-card" class="hide">
+    <div id="cardEmpty" class="card"><p class="muted">아직 말투 카드가 없습니다. ①에서 통화를 올리고 「내 말투 분석하기」를 눌러 주세요.</p></div>
+    <div id="cardBody" class="hide">
+      <div class="card">
+        <h2 id="cardTitle">말투 카드</h2>
+        <p id="cardMeta" class="muted"></p>
+        <p id="cardRel" class="note"></p>
+        <h3>문장을 어떻게 끝내는지</h3>
+        <div id="endBars" class="bars"></div>
+        <h3>세어 본 습관</h3>
+        <ul id="sumList" class="plain"></ul>
+        <div id="qualWrap" class="hide"><h3>말하는 방식</h3><ul id="qualList" class="plain"></ul></div>
+        <p id="qualNote" class="muted"></p>
+      </div>
+      <div class="card">
+        <h2>글 쓸 때 기준으로 삼는 실제 발화 <span class="muted" id="exCount"></span></h2>
+        <p class="muted">선생님이 통화에서 실제로 한 말입니다. 학생 이름은 {학생}으로 가려 두었습니다.</p>
+        <div id="exList"></div>
+      </div>
+      <div class="card">
+        <h2>직접 덧붙이기</h2>
+        <div class="row">
+          <div><label>꼭 쓰는 말(쉼표로 구분)</label><input id="cAlways" placeholder="예: 다름이 아니라, 들어가세요"></div>
+          <div><label>절대 안 쓰는 말(쉼표로 구분)</label><input id="cBanned" placeholder="예: 학부모님, ~습니다"></div>
+        </div>
+        <label>메모(선택)</label><input id="cNotes" placeholder="예: 문자에서는 이모티콘 ^^ 를 가끔 씀">
+        <label style="display:flex;gap:8px;align-items:center"><input id="cEmoji" type="checkbox" style="width:auto"> 글에 이모지를 써도 됨</label>
+        <p><button id="btnCustom" class="btn small">저장</button></p>
+      </div>
+      <div class="card">
+        <h2>다른 AI에서 내 말투 쓰기</h2>
+        <p class="muted">아래 버튼으로 복사한 내용을 Claude·ChatGPT 등의 「지침/프로젝트 설명」에 붙이면, 그곳에서도 같은 말투로 글을 씁니다.</p>
+        <p><button id="btnExport" class="btn">내 말투 프롬프트 복사</button> <button id="btnExportShow" class="link">내용 보기</button></p>
+        <textarea id="exportText" class="hide" readonly style="min-height:260px;font-size:13px"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 상담 글 만들기 -->
+  <div id="tab-write" class="hide">
+    <div class="card">
+      <h2>어떤 글이 필요한가요?</h2>
+      <div class="seg" id="modeSeg"></div>
+      <div class="row" style="margin-top:6px">
+        <div><label>전달 수단</label><select id="wChannel"></select></div>
+        <div><label>상황</label><select id="wSituation"></select></div>
+        <div><label>길이</label><select id="wLength"></select></div>
+        <div><label>말버릇 반영</label><select id="wIntensity"><option value="1">은은하게</option><option value="2" selected>평소대로</option><option value="3">진하게</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>학생 이름</label><input id="wStudent" placeholder="예: 민준"></div>
+        <div><label>학부모 호칭</label><input id="wParent" placeholder="예: 어머님 (비우면 평소 호칭)"></div>
+        <div><label>안 개수</label><select id="wVariants"><option>1</option><option selected>2</option><option>3</option></select></div>
+      </div>
+      <div id="parentMsgWrap" class="hide"><label>학부모가 보낸 글</label><textarea id="wParentMsg" placeholder="받은 문자·카톡을 그대로 붙여 주세요."></textarea></div>
+      <label>전할 내용 메모 — 사실만 짧게 적어 주세요. 여기 없는 내용은 지어내지 않습니다.</label>
+      <textarea id="wFacts" placeholder="예: 이번 주 수학 숙제 2번 안 해옴. 어제 본인과 얘기함. 다음 주까지 지켜보고 다시 연락 예정."></textarea>
+      <p style="margin-top:12px"><button id="btnGen" class="btn primary">내 말투로 쓰기</button> <span id="genHint" class="muted"></span></p>
+    </div>
+    <div id="notices"></div>
+    <div id="results"></div>
+  </div>
+
+  <!-- 설정 -->
+  <div id="tab-set" class="hide">
+    <div class="card">
+      <h2>내 정보</h2>
+      <div class="row">
+        <div><label>이름</label><input id="sName"></div>
+        <div><label>역할</label><select id="sRole"></select></div>
+        <div><label>소속</label><input id="sOrg"></div>
+        <div><label>담당</label><input id="sGrade"></div>
+      </div>
+      <p><button id="btnSaveMe" class="btn small">저장</button></p>
+    </div>
+    <div class="card">
+      <h2>확정한 글 <span id="egCount" class="muted"></span></h2>
+      <p class="muted">③에서 「이 글로 확정」한 글입니다. 다음 글부터 이 글들을 가장 믿을 만한 기준으로 씁니다.</p>
+      <div id="egList"></div>
+    </div>
+    <div class="card">
+      <h2>계정 삭제</h2>
+      <p class="muted">통화 전사, 말투 카드, 확정한 글이 모두 지워지고 되돌릴 수 없습니다.</p>
+      <p><button id="btnDelete" class="btn small" style="color:var(--bad)">계정과 모든 데이터 삭제</button></p>
+    </div>
+  </div>
+</section>
+</main>
+<div id="toast" class="toast hide"></div>
+
+<script>
+/* 체험판: 서버 대신 이 데이터가 응답한다. scripts/build_preview.py 가 생성 — 직접 고치지 말 것 */
+(() => {
+  const D = {"me":{"id":"t_demo","login_id":"demo","name":"김도윤","role":"homeroom","org":"가상중학교","grade":"2학년"},"health":{"stt":{"provider":"local","ready":true,"ffmpeg":true,"whisper_filter":true,"model":"(체험판)","model_ready":true},"llm":{"provider":"demo","model":null},"invite_required":false,"keep_audio":false,"options":{"roles":{"homeroom":"담임교사","subject":"교과교사","academy":"학원 강사","director":"학원 원장","kinder":"유치원·어린이집 교사","afterschool":"방과후·돌봄 교사","counselor":"상담교사","other":"교사"},"channels":{"sms":"문자(SMS/LMS)","kakao":"카카오톡·메신저","call":"전화 통화 대본","note":"알림장·가정통신 짧은 글"},"modes":{"reply":"학부모가 보낸 글에 대한 답장","initiate":"선생님이 먼저 보내는 연락","call_script":"통화 전에 읽어 볼 말하기 대본","after_call":"통화 후 내용을 정리해 보내는 글"},"situations":{"grade":"성적·학습","homework":"숙제·과제","attitude":"수업 태도·생활","friend":"교우 관계·다툼","attendance":"출결(지각·결석·조퇴)","praise":"칭찬·좋은 소식","health":"건강·안전","schedule":"일정·상담 안내","complaint":"민원·항의 응대","fee":"수강료·행정","career":"진로·진학","etc":"기타"},"lengths":{"short":"짧게(3~4문장)","normal":"선생님 평소 길이(5~8문장)","long":"자세히(9~14문장)"}}},"recordings":[{"id":"r_demo1","title":"샘플 통화 1 · 숙제","source":"audio","status":"done","error":null,"duration":128.2,"student_names":[],"created_at":"2026-11-20 10:00:00","units":[{"i":0,"seg":0,"start":0.0,"end":1.68,"text":"어머님 안녕하세요.","speaker":"T","conf":1.0},{"i":1,"seg":0,"start":1.68,"end":3.36,"text":"서준이 담임이에요.","speaker":"T","conf":1.0},{"i":2,"seg":0,"start":3.36,"end":5.88,"text":"지금 잠깐 통화 괜찮으세요?","speaker":"T","conf":0.7},{"i":3,"seg":1,"start":7.7,"end":9.06,"text":"아, 네 선생님.","speaker":"P","conf":1.0},{"i":4,"seg":1,"start":9.06,"end":9.97,"text":"안녕하세요.","speaker":"P","conf":0.59},{"i":5,"seg":1,"start":9.97,"end":11.18,"text":"네, 괜찮아요.","speaker":"P","conf":0.7},{"i":6,"seg":2,"start":12.74,"end":13.07,"text":"네네.","speaker":"T","conf":0.7},{"i":7,"seg":2,"start":13.07,"end":17.24,"text":"다름이 아니라 서준이 요즘 학교 생활 좀 말씀드리려고 전화드렸거든요.","speaker":"T","conf":0.83},{"i":8,"seg":3,"start":18.56,"end":20.19,"text":"일단은 큰일은 아니고요.","speaker":"T","conf":0.8},{"i":9,"seg":3,"start":20.19,"end":22.7,"text":"어머님 놀라실까 봐 먼저 말씀드려요.","speaker":"T","conf":1.0},{"i":10,"seg":4,"start":23.64,"end":24.35,"text":"아, 네.","speaker":"P","conf":0.7},{"i":11,"seg":4,"start":24.35,"end":26.34,"text":"무슨 일 있나요, 선생님?","speaker":"P","conf":1.0},{"i":12,"seg":5,"start":28.02,"end":31.12,"text":"사실 서준이가 원래 수업 태도가 되게 좋은 친구잖아요.","speaker":"T","conf":0.95},{"i":13,"seg":6,"start":32.62,"end":35.1,"text":"근데 2주 정도 숙제를 좀 안 해오더라고요.","speaker":"T","conf":0.67},{"i":14,"seg":7,"start":36.62,"end":39.08,"text":"수학이랑 영어 쪽에서 3번 정도 빠졌거든요.","speaker":"T","conf":0.5},{"i":15,"seg":8,"start":40.76,"end":41.73,"text":"아, 그래요?","speaker":"P","conf":0.7},{"i":16,"seg":8,"start":41.73,"end":43.96,"text":"집에서는 다 했다고 하던데요.","speaker":"P","conf":1.0},{"i":17,"seg":9,"start":45.46,"end":46.23,"text":"아, 그렇죠.","speaker":"T","conf":0.5},{"i":18,"seg":9,"start":46.23,"end":48.1,"text":"애들이 보통 그렇게 말하거든요.","speaker":"T","conf":0.62},{"i":19,"seg":10,"start":49.44,"end":51.92,"text":"제가 서준이랑 어제 잠깐 얘기를 해봤는데요.","speaker":"T","conf":0.75},{"i":20,"seg":11,"start":51.92,"end":56.14,"text":"요즘 학원 숙제가 많아져서 학교 거를 좀 미뤘다고 하더라고요.","speaker":"T","conf":0.67},{"i":21,"seg":12,"start":57.04,"end":60.22,"text":"아이고, 학원을 하나 더 늘렸거든요.","speaker":"P","conf":0.75},{"i":22,"seg":13,"start":61.26,"end":62.44,"text":"그게 좀 무리였나 봐요.","speaker":"P","conf":0.5},{"i":23,"seg":14,"start":64.08,"end":64.44,"text":"네네.","speaker":"T","conf":0.5},{"i":24,"seg":14,"start":64.44,"end":66.1,"text":"아무래도 그런 것 같아요.","speaker":"T","conf":0.62},{"i":25,"seg":15,"start":67.6,"end":71.84,"text":"일단은 제가 이번 주까지는 숙제 검사할 때 서준이를 좀 더 챙겨볼게요.","speaker":"T","conf":0.67},{"i":26,"seg":16,"start":73.34,"end":77.5,"text":"그리고 어머님께서도 집에서 저녁에 한 번만 물어봐 주시면 좋을 것 같아요.","speaker":"T","conf":1.0},{"i":27,"seg":17,"start":77.5,"end":79.68,"text":"네, 알겠습니다.","speaker":"P","conf":0.65},{"i":28,"seg":17,"start":79.68,"end":81.87,"text":"제가 확인할게요.","speaker":"P","conf":0.65},{"i":29,"seg":17,"start":81.87,"end":84.54,"text":"성적은 좀 어떤가요?","speaker":"P","conf":0.65},{"i":30,"seg":18,"start":86.06,"end":86.73,"text":"성적은요.","speaker":"T","conf":0.7},{"i":31,"seg":18,"start":86.73,"end":90.46,"text":"사실 지난 중간고사 때는 반에서 중상위권이었거든요.","speaker":"T","conf":0.67},{"i":32,"seg":19,"start":91.8,"end":94.6,"text":"근데 이번 수행평가 점수가 조금 내려가긴 했어요.","speaker":"T","conf":0.67},{"i":33,"seg":20,"start":96.22,"end":98.28,"text":"그래도 아직 걱정하실 정도는 아니고요.","speaker":"T","conf":0.62},{"i":34,"seg":21,"start":98.84,"end":100.6,"text":"지금 잡으면 충분히 올라와요.","speaker":"T","conf":0.5},{"i":35,"seg":22,"start":102.22,"end":103.19,"text":"다행이네요.","speaker":"P","conf":0.7},{"i":36,"seg":22,"start":103.19,"end":104.96,"text":"감사합니다, 선생님.","speaker":"P","conf":1.0},{"i":37,"seg":23,"start":106.68,"end":107.6,"text":"아니에요, 어머님.","speaker":"T","conf":1.0},{"i":38,"seg":24,"start":109.02,"end":111.94,"text":"서준이가 워낙 성실한 친구라서 금방 돌아올 거예요.","speaker":"T","conf":0.7},{"i":39,"seg":25,"start":113.46,"end":116.08,"text":"제가 다음 주에 한 번 더 보고 다시 연락드릴게요.","speaker":"T","conf":0.92},{"i":40,"seg":26,"start":117.98,"end":118.88,"text":"네, 선생님.","speaker":"P","conf":1.0},{"i":41,"seg":26,"start":118.88,"end":120.54,"text":"신경 써주셔서 감사해요.","speaker":"P","conf":1.0},{"i":42,"seg":27,"start":122.14,"end":123.04,"text":"네, 어머님.","speaker":"T","conf":1.0},{"i":43,"seg":27,"start":123.04,"end":124.58,"text":"그럼 또 연락드릴게요.","speaker":"T","conf":0.92},{"i":44,"seg":28,"start":126.1,"end":126.68,"text":"들어봐세요.","speaker":"T","conf":0.5}]},{"id":"r_demo2","title":"샘플 통화 2 · 친구와 다툼","source":"audio","status":"done","error":null,"duration":108.0,"student_names":[],"created_at":"2026-11-20 10:00:00","units":[{"i":0,"seg":0,"start":0.0,"end":1.36,"text":"아버님 안녕하세요.","speaker":"T","conf":0.91},{"i":1,"seg":0,"start":1.36,"end":2.72,"text":"하윤이 담임이에요.","speaker":"T","conf":1.0},{"i":2,"seg":1,"start":4.24,"end":5.82,"text":"지금 잠깐 통화 괜찮으세요?","speaker":"T","conf":0.5},{"i":3,"seg":2,"start":7.62,"end":8.66,"text":"네, 선생님.","speaker":"P","conf":1.0},{"i":4,"seg":2,"start":8.66,"end":9.56,"text":"말씀하세요.","speaker":"P","conf":0.7},{"i":5,"seg":3,"start":10.9,"end":11.24,"text":"네네.","speaker":"T","conf":0.7},{"i":6,"seg":3,"start":11.24,"end":15.38,"text":"다름이 아니라 오늘 학교에서 하윤이가 친구랑 좀 다툼이 있었거든요.","speaker":"T","conf":0.67},{"i":7,"seg":4,"start":16.72,"end":18.46,"text":"일단은 다친 데는 없고요.","speaker":"T","conf":0.8},{"i":8,"seg":4,"start":18.46,"end":21.08,"text":"아버님 걱정하실까 봐 먼저 말씀드려요.","speaker":"T","conf":1.0},{"i":9,"seg":5,"start":21.92,"end":23.26,"text":"아, 그래요?","speaker":"P","conf":0.7},{"i":10,"seg":5,"start":23.26,"end":25.18,"text":"누구랑 싸웠습니까?","speaker":"P","conf":0.65},{"i":11,"seg":6,"start":26.42,"end":27.69,"text":"같은 반 친구인데요.","speaker":"T","conf":0.7},{"i":12,"seg":6,"start":27.69,"end":30.1,"text":"사실 둘이 원래 되게 친한 사이잖아요.","speaker":"T","conf":0.59},{"i":13,"seg":7,"start":31.52,"end":35.22,"text":"근데 점심시간에 모둠 활동 얘기하다가 말이 좀 세게 나왔더라고요.","speaker":"T","conf":0.67},{"i":14,"seg":8,"start":36.76,"end":38.96,"text":"서로 밀치거나 그런 건 전혀 없었고요.","speaker":"T","conf":1.0,"manual":true},{"i":15,"seg":9,"start":40.68,"end":42.62,"text":"하윤이가 먼저 그런 건가요?","speaker":"P","conf":0.65},{"i":16,"seg":10,"start":43.96,"end":44.79,"text":"음, 그게요.","speaker":"T","conf":0.7},{"i":17,"seg":10,"start":44.79,"end":49.42,"text":"제가 양쪽 얘기를 다 들어봤는데 누가 먼저라고 하기는 좀 어렵더라고요.","speaker":"T","conf":0.75},{"i":18,"seg":11,"start":50.3,"end":53.34,"text":"둘 다 서운한 게 좀 쌓여 있었던 것 같아요.","speaker":"T","conf":0.62},{"i":19,"seg":12,"start":54.78,"end":58.42,"text":"일단은 오늘 밤과 후에 둘이 같이 얘기하고 서로 사과는 했거든요.","speaker":"T","conf":0.5},{"i":20,"seg":13,"start":60.16,"end":60.83,"text":"아, 네.","speaker":"P","conf":0.5},{"i":21,"seg":13,"start":60.83,"end":62.04,"text":"그럼 다행이네요.","speaker":"P","conf":0.5},{"i":22,"seg":14,"start":63.32,"end":64.03,"text":"네네.","speaker":"T","conf":0.5},{"i":23,"seg":14,"start":64.03,"end":64.74,"text":"그쵸.","speaker":"T","conf":0.62},{"i":24,"seg":15,"start":65.92,"end":68.8,"text":"근데 하윤이가 집에 가서 좀 속상해할 수도 있거든요.","speaker":"T","conf":0.62},{"i":25,"seg":16,"start":70.14,"end":75.56,"text":"그래서 아버님께서 오늘 저녁에 무슨 일 있었냐고 한 번만 편하게 물어봐 주시면 좋을 것 같아요.","speaker":"T","conf":1.0},{"i":26,"seg":17,"start":77.36,"end":78.38,"text":"알겠습니다.","speaker":"P","conf":0.65},{"i":27,"seg":17,"start":78.38,"end":80.6,"text":"제가 얘기해 보겠습니다.","speaker":"P","conf":0.8},{"i":28,"seg":18,"start":82.16,"end":82.96,"text":"네, 감사해요.","speaker":"T","conf":1.0,"manual":true},{"i":29,"seg":19,"start":83.9,"end":87.78,"text":"사실 하윤이가 평소에 친구들을 되게 잘 챙기는 친구라서요.","speaker":"T","conf":0.79},{"i":30,"seg":20,"start":88.5,"end":90.14,"text":"저는 크게 걱정은 안 하거든요.","speaker":"T","conf":0.62},{"i":31,"seg":21,"start":91.52,"end":94.24,"text":"제가 이번 주는 둘이 지내는 거 좀 더 지켜보고요.","speaker":"T","conf":0.62},{"i":32,"seg":22,"start":94.82,"end":97.2,"text":"혹시 또 무슨 일 있으면 바로 연락드릴게요.","speaker":"T","conf":0.92},{"i":33,"seg":23,"start":98.74,"end":99.59,"text":"네, 선생님.","speaker":"P","conf":1.0},{"i":34,"seg":23,"start":99.59,"end":100.32,"text":"감사합니다.","speaker":"P","conf":0.63},{"i":35,"seg":24,"start":101.96,"end":102.84,"text":"네, 아버님.","speaker":"T","conf":1.0},{"i":36,"seg":24,"start":102.84,"end":104.36,"text":"그럼 또 연락드릴게요.","speaker":"T","conf":0.92},{"i":37,"seg":25,"start":105.9,"end":106.48,"text":"들어가세요.","speaker":"T","conf":0.5}]},{"id":"r_demo3","title":"샘플 통화 3 · 칭찬과 상담 안내","source":"audio","status":"done","error":null,"duration":111.3,"student_names":[],"created_at":"2026-11-20 10:00:00","units":[{"i":0,"seg":0,"start":0.0,"end":1.72,"text":"어머님 안녕하세요.","speaker":"T","conf":1.0},{"i":1,"seg":0,"start":1.72,"end":3.26,"text":"지호 담임이에요.","speaker":"T","conf":1.0},{"i":2,"seg":0,"start":3.26,"end":5.84,"text":"지금 잠깐 통화 괜찮으세요?","speaker":"T","conf":0.7},{"i":3,"seg":1,"start":7.66,"end":9.46,"text":"네 선생님 안녕하세요.","speaker":"P","conf":1.0},{"i":4,"seg":1,"start":9.46,"end":11.86,"text":"혹시 지호가 무슨 잘못했나요?","speaker":"P","conf":0.65},{"i":5,"seg":2,"start":13.34,"end":14.97,"text":"아 아니에요 어머님.","speaker":"T","conf":1.0},{"i":6,"seg":2,"start":14.97,"end":17.63,"text":"오늘은 좋은 일로 전화드렸거든요.","speaker":"T","conf":0.83},{"i":7,"seg":2,"start":17.63,"end":19.56,"text":"일단은 안심하셔도 돼요.","speaker":"T","conf":0.7},{"i":8,"seg":3,"start":21.32,"end":22.48,"text":"아 그래요?","speaker":"P","conf":0.5},{"i":9,"seg":3,"start":22.48,"end":23.44,"text":"다행이다.","speaker":"P","conf":0.5},{"i":10,"seg":4,"start":24.7,"end":25.11,"text":"네네.","speaker":"T","conf":0.7},{"i":11,"seg":4,"start":25.11,"end":27.81,"text":"지호가 이번에 과학 발표를 했는데요.","speaker":"T","conf":0.67},{"i":12,"seg":4,"start":27.81,"end":30.38,"text":"준비를 되게 꼼꼼하게 해왔더라고요.","speaker":"T","conf":0.59},{"i":13,"seg":5,"start":31.84,"end":34.91,"text":"친구들 앞에서 설명도 차분하게 잘했고요.","speaker":"T","conf":0.8},{"i":14,"seg":5,"start":34.91,"end":37.98,"text":"과학 선생님도 따로 칭찬을 하시더라고요.","speaker":"T","conf":0.67},{"i":15,"seg":6,"start":39.72,"end":40.71,"text":"어머 정말요?","speaker":"P","conf":0.7},{"i":16,"seg":6,"start":40.71,"end":43.68,"text":"집에서는 그런 얘기 전혀 안 하던데요.","speaker":"P","conf":1.0},{"i":17,"seg":7,"start":45.16,"end":45.49,"text":"그쵸.","speaker":"T","conf":0.7},{"i":18,"seg":7,"start":45.49,"end":48.5,"text":"지호가 원래 자기 자랑을 잘 안 하는 친구잖아요.","speaker":"T","conf":0.7},{"i":19,"seg":8,"start":49.34,"end":52.92,"text":"그래서 제가 어머님께 꼭 말씀드리고 싶었거든요.","speaker":"T","conf":1.0},{"i":20,"seg":9,"start":54.32,"end":57.76,"text":"집에서 한 번만 칭찬해 주시면 지호가 되게 좋아할 것 같아요.","speaker":"T","conf":1.0},{"i":21,"seg":10,"start":59.62,"end":61.06,"text":"네 꼭 그럴게요.","speaker":"P","conf":0.65},{"i":22,"seg":10,"start":61.06,"end":62.66,"text":"감사합니다 선생님.","speaker":"P","conf":1.0},{"i":23,"seg":11,"start":64.36,"end":64.72,"text":"아니에요.","speaker":"T","conf":0.5},{"i":24,"seg":12,"start":66.26,"end":68.15,"text":"그리고 하나만 더 말씀드리면요.","speaker":"T","conf":0.83},{"i":25,"seg":12,"start":68.15,"end":71.14,"text":"다음 달 둘째 주에 학부모 상담 주간이 있거든요.","speaker":"T","conf":0.67},{"i":26,"seg":13,"start":72.58,"end":75.04,"text":"사실 지호는 특별히 걱정되는 건 없는데요.","speaker":"T","conf":1.0,"manual":true},{"i":27,"seg":14,"start":75.62,"end":78.14,"text":"진로 얘기를 한 번 나눠보면 좋을 것 같아서요.","speaker":"T","conf":1.0,"manual":true},{"i":28,"seg":15,"start":79.78,"end":80.29,"text":"아 네.","speaker":"P","conf":1.0,"manual":true},{"i":29,"seg":15,"start":80.29,"end":82.08,"text":"저도 그게 좀 궁금했어요.","speaker":"P","conf":1.0,"manual":true},{"i":30,"seg":16,"start":82.08,"end":84.52,"text":"어떻게 신청하면 되나요?","speaker":"P","conf":0.65},{"i":31,"seg":17,"start":85.08,"end":88.52,"text":"일단은 다음 주에 가정통신문이 나가거든요.","speaker":"T","conf":0.67},{"i":32,"seg":18,"start":89.82,"end":92.22,"text":"거기에 가능한 시간을 적어서 보내주시면 돼요.","speaker":"T","conf":0.92},{"i":33,"seg":19,"start":93.64,"end":96.72,"text":"혹시 직접 오시기 어려우면 전화 상담도 되니까요.","speaker":"T","conf":0.62},{"i":34,"seg":20,"start":97.26,"end":98.66,"text":"편하신 쪽으로 하시면 돼요.","speaker":"T","conf":0.5},{"i":35,"seg":21,"start":100.42,"end":101.18,"text":"네 알겠습니다.","speaker":"P","conf":0.65},{"i":36,"seg":22,"start":102.32,"end":103.58,"text":"확인하고 신청할게요.","speaker":"P","conf":0.5},{"i":37,"seg":23,"start":105.2,"end":105.94,"text":"네 어머님.","speaker":"T","conf":1.0},{"i":38,"seg":24,"start":106.48,"end":107.64,"text":"그럼 또 연락드릴게요.","speaker":"T","conf":0.92},{"i":39,"seg":25,"start":109.12,"end":109.74,"text":"들어가세요.","speaker":"T","conf":0.5}]}],"profile":{"version":1,"built_at":"2026-11-21 13:05","names_masked":["서준","하윤","지호"],"stats":{"n_recordings":3,"n_sentences":83,"n_eojeol":404,"endings":[{"label":"~거든요","count":12,"share":0.169},{"label":"~어요/아요","count":8,"share":0.113},{"label":"~(으)ㄹ게요","count":7,"share":0.099},{"label":"~세요","count":6,"share":0.085},{"label":"~고요","count":6,"share":0.085},{"label":"~더라고요","count":6,"share":0.085},{"label":"~것 같아요","count":6,"share":0.085},{"label":"호칭으로 끝맺음(네, 어머님)","count":5,"share":0.07},{"label":"~는데요","count":4,"share":0.056},{"label":"~이에요/예요","count":3,"share":0.042},{"label":"~잖아요","count":3,"share":0.042},{"label":"~(아)서요/니까요","count":2,"share":0.028},{"label":"~죠","count":1,"share":0.014},{"label":"~거예요","count":1,"share":0.014},{"label":"~(으)ㄹ까요","count":1,"share":0.014}],"formality":{"haeyo":0.93,"hapsyo":0.0,"other":0.07},"sentence_len":{"mean":6.3,"median":6.0,"p25":4.0,"p75":8.0,"short_share":0.301,"long_share":0.017},"question_share":0.036,"markers":[{"word":"일단은","count":6,"per100":7.2},{"word":"사실","count":5,"per100":6.0},{"word":"근데","count":4,"per100":4.8},{"word":"그럼","count":3,"per100":3.6},{"word":"그래서","count":2,"per100":2.4},{"word":"그리고","count":2,"per100":2.4},{"word":"다름이 아니라","count":2,"per100":2.4},{"word":"아무래도","count":1,"per100":1.2},{"word":"그래도","count":1,"per100":1.2},{"word":"그게요","count":1,"per100":1.2},{"word":"하나만 더","count":1,"per100":1.2}],"backchannels":[{"word":"네네","count":5,"per100":6.0},{"word":"네(말머리)","count":4,"per100":4.8},{"word":"그쵸","count":3,"per100":3.6},{"word":"아니에요","count":3,"per100":3.6},{"word":"아(말머리)","count":2,"per100":2.4},{"word":"음","count":1,"per100":1.2}],"intensifiers":[{"word":"좀","count":10,"per100":12.0},{"word":"되게","count":5,"per100":6.0},{"word":"잠깐","count":4,"per100":4.8},{"word":"조금","count":1,"per100":1.2},{"word":"워낙","count":1,"per100":1.2},{"word":"꼭","count":1,"per100":1.2},{"word":"충분히","count":1,"per100":1.2},{"word":"전혀","count":1,"per100":1.2},{"word":"크게","count":1,"per100":1.2},{"word":"금방","count":1,"per100":1.2}],"cushions":[{"word":"말씀드리~","count":5,"per100":6.0},{"word":"~주시면","count":4,"per100":4.8},{"word":"~면 좋을 것 같아요","count":3,"per100":3.6},{"word":"한 번만","count":3,"per100":3.6},{"word":"괜찮으세요","count":3,"per100":3.6},{"word":"~실까 봐","count":2,"per100":2.4},{"word":"혹시","count":2,"per100":2.4},{"word":"편하게/편하신","count":2,"per100":2.4},{"word":"먼저 말씀","count":2,"per100":2.4},{"word":"걱정하실 정도는","count":1,"per100":1.2},{"word":"큰일은 아니고요","count":1,"per100":1.2}],"address":{"parent":[{"form":"어머님","count":9},{"form":"아버님","count":4}],"student":[{"form":"{학생}이(이름+이)","count":10},{"form":"친구(학생을 '친구'라 부름)","count":7},{"form":"애","count":1}]},"phrases":[{"text":"지금 잠깐 통화 괜찮으세요","count":3,"example":"지금 잠깐 통화 괜찮으세요?"},{"text":"것 같아요","count":5,"example":"아무래도 그런 것 같아요."},{"text":"그럼 또 연락드릴게요","count":3,"example":"그럼 또 연락드릴게요."},{"text":"한 번만","count":3,"example":"그리고 어머님께서도 집에서 저녁에 한 번만 물어봐 주시면 좋을 것 같아요."},{"text":"좋을 것","count":3,"example":"그리고 어머님께서도 집에서 저녁에 한 번만 물어봐 주시면 좋을 것 같아요."}]},"reliability":{"level":"보통","note":"쓸 만하지만, 통화를 1~2개 더 넣으면 습관 구절이 더 정확해집니다.","n_sentences":83},"exemplars":[{"id":"r0t0","rec":0,"text":"어머님 안녕하세요. {학생}이 담임이에요. 지금 잠깐 통화 괜찮으세요?","function":"opener"},{"id":"r1t0","rec":1,"text":"아버님 안녕하세요. {학생}이 담임이에요. 지금 잠깐 통화 괜찮으세요?","function":"opener"},{"id":"r2t0","rec":2,"text":"어머님 안녕하세요. {학생} 담임이에요. 지금 잠깐 통화 괜찮으세요?","function":"opener"},{"id":"r0t1","rec":0,"text":"네네. 다름이 아니라 {학생}이 요즘 학교 생활 좀 말씀드리려고 전화드렸거든요. 일단은 큰일은 아니고요. 어머님 놀라실까 봐 먼저 말씀드려요.","function":"reassure"},{"id":"r1t1","rec":1,"text":"네네. 다름이 아니라 오늘 학교에서 {학생}이가 친구랑 좀 다툼이 있었거든요. 일단은 다친 데는 없고요. 아버님 걱정하실까 봐 먼저 말씀드려요.","function":"reassure"},{"id":"r2t1","rec":2,"text":"아 아니에요 어머님. 오늘은 좋은 일로 전화드렸거든요. 일단은 안심하셔도 돼요.","function":"reassure"},{"id":"r0t5","rec":0,"text":"성적은요. 사실 지난 중간고사 때는 반에서 중상위권이었거든요. 근데 이번 수행평가 점수가 조금 내려가긴 했어요. 그래도 아직 걱정하실 정도는 아니고요. 지금 잡으면 충분히 올라와요.","function":"concern"},{"id":"r0t2","rec":0,"text":"사실 {학생}이가 원래 수업 태도가 되게 좋은 친구잖아요. 근데 2주 정도 숙제를 좀 안 해오더라고요. 수학이랑 영어 쪽에서 3번 정도 빠졌거든요.","function":"concern"},{"id":"r1t4","rec":1,"text":"네네. 그쵸. 근데 {학생}이가 집에 가서 좀 속상해할 수도 있거든요. 그래서 아버님께서 오늘 저녁에 무슨 일 있었냐고 한 번만 편하게 물어봐 주시면 좋을 것 같아요.","function":"concern"},{"id":"r1t3","rec":1,"text":"음, 그게요. 제가 양쪽 얘기를 다 들어봤는데 누가 먼저라고 하기는 좀 어렵더라고요. 둘 다 서운한 게 좀 쌓여 있었던 것 같아요. 일단은 오늘 밤과 후에 둘이 같이 얘기하고 서로 사과는 했거든요.","function":"concern"},{"id":"r2t3","rec":2,"text":"그쵸. {학생}가 원래 자기 자랑을 잘 안 하는 친구잖아요. 그래서 제가 어머님께 꼭 말씀드리고 싶었거든요. 집에서 한 번만 칭찬해 주시면 {학생}가 되게 좋아할 것 같아요.","function":"praise"},{"id":"r2t2","rec":2,"text":"네네. {학생}가 이번에 과학 발표를 했는데요. 준비를 되게 꼼꼼하게 해왔더라고요. 친구들 앞에서 설명도 차분하게 잘했고요. 과학 선생님도 따로 칭찬을 하시더라고요.","function":"praise"},{"id":"r1t2","rec":1,"text":"같은 반 친구인데요. 사실 둘이 원래 되게 친한 사이잖아요. 근데 점심시간에 모둠 활동 얘기하다가 말이 좀 세게 나왔더라고요. 서로 밀치거나 그런 건 전혀 없었고요.","function":"explain"},{"id":"r0t6","rec":0,"text":"아니에요, 어머님. {학생}이가 워낙 성실한 친구라서 금방 돌아올 거예요. 제가 다음 주에 한 번 더 보고 다시 연락드릴게요.","function":"plan"},{"id":"r1t5","rec":1,"text":"네, 감사해요. 사실 {학생}이가 평소에 친구들을 되게 잘 챙기는 친구라서요. 저는 크게 걱정은 안 하거든요. 제가 이번 주는 둘이 지내는 거 좀 더 지켜보고요. 혹시 또 무슨 일 있으면 바로 연락드릴게요.","function":"plan"},{"id":"r0t4","rec":0,"text":"네네. 아무래도 그런 것 같아요. 일단은 제가 이번 주까지는 숙제 검사할 때 {학생}이를 좀 더 챙겨볼게요. 그리고 어머님께서도 집에서 저녁에 한 번만 물어봐 주시면 좋을 것 같아요.","function":"request"},{"id":"r2t5","rec":2,"text":"일단은 다음 주에 가정통신문이 나가거든요. 거기에 가능한 시간을 적어서 보내주시면 돼요. 혹시 직접 오시기 어려우면 전화 상담도 되니까요. 편하신 쪽으로 하시면 돼요.","function":"request"},{"id":"r2t4","rec":2,"text":"아니에요. 그리고 하나만 더 말씀드리면요. 다음 달 둘째 주에 학부모 상담 주간이 있거든요. 사실 {학생}는 특별히 걱정되는 건 없는데요. 진로 얘기를 한 번 나눠보면 좋을 것 같아서요.","function":"guide"},{"id":"r0t7","rec":0,"text":"네, 어머님. 그럼 또 연락드릴게요. 들어봐세요.","function":"closer"},{"id":"r1t6","rec":1,"text":"네, 아버님. 그럼 또 연락드릴게요. 들어가세요.","function":"closer"},{"id":"r2t6","rec":2,"text":"네 어머님. 그럼 또 연락드릴게요. 들어가세요.","function":"closer"}],"qualitative":{"one_line":"용건을 말하기 전에 \"큰일은 아니고요\", \"다친 데는 없고요\"처럼 걱정할 일인지부터 먼저 정리해 주고, 이야기는 언제나 \"제가 ~할게요\" 다음에 \"~해 주시면 좋을 것 같아요\"로 마무리합니다.","delivery_order":"통화 가능 여부를 묻고(\"지금 잠깐 통화 괜찮으세요?\") \"다름이 아니라\"로 용건을 한 줄 꺼낸 뒤, 바로 심각도를 정리하고(\"일단은 큰일은 아니고요\") 사실 설명, 원인, 교사가 할 일, 학부모에게 부탁, \"다시 연락드릴게요\" 순서로 갑니다. 좋은 소식일 때도 \"좋은 일로 전화드렸거든요. 일단은 안심하셔도 돼요\"처럼 안심부터 시킵니다.","bad_news":"문제를 말하기 전에 아이의 원래 좋은 모습을 \"원래 ~한 친구잖아요\"로 깔아 두고, \"근데\"로 넘어가 \"좀\"을 붙여 문제를 말합니다(\"근데 2주 정도 숙제를 좀 안 해오더라고요\"). 이어서 \"서로 밀치거나 그런 건 전혀 없었고요\", \"아직 걱정하실 정도는 아니고요\"처럼 어디까지는 아니라고 선을 그어 줍니다.","praise":"\"준비를 되게 꼼꼼하게 해왔더라고요\", \"설명도 차분하게 잘했고요\"처럼 직접 본 행동을 \"되게\"를 넣어 구체적으로 말하고, \"과학 선생님도 따로 칭찬을 하시더라고요\"처럼 다른 사람의 평가를 덧붙입니다. 칭찬을 전하는 이유도 함께 말합니다(\"자기 자랑을 잘 안 하는 친구잖아요. 그래서 제가 어머님께 꼭 말씀드리고 싶었거든요\").","request":"부탁하기 전에 교사가 먼저 할 일을 말하고(\"제가 이번 주까지는 숙제 검사할 때 {학생}이를 좀 더 챙겨볼게요\"), 부탁은 \"한 번만\"과 \"편하게\"로 부담을 줄여 \"~주시면 좋을 것 같아요\"로 맺습니다(\"한 번만 편하게 물어봐 주시면 좋을 것 같아요\"). 행정 안내는 \"보내주시면 돼요\", \"편하신 쪽으로 하시면 돼요\"처럼 선택지를 열어 둡니다.","empathy":"학부모가 놀랄 것을 미리 짐작해 \"어머님 놀라실까 봐 먼저 말씀드려요\", \"아버님 걱정하실까 봐 먼저 말씀드려요\"라고 먼저 짚고, 학부모의 사과나 걱정에는 \"아니에요, 어머님\"으로 받은 뒤 아이의 평소 성품을 근거로 안심시킵니다(\"워낙 성실한 친구라서 금방 돌아올 거예요\", \"저는 크게 걱정은 안 하거든요\").","explain":"\"2주 정도\", \"3번 정도 빠졌거든요\", \"반에서 중상위권이었거든요\"처럼 횟수·기간·위치를 대략적인 숫자로 짚고, 원인은 \"제가 {학생}이랑 어제 잠깐 얘기를 해봤는데요\", \"제가 양쪽 얘기를 다 들어봤는데\"처럼 교사가 직접 확인한 내용으로 설명합니다. 다툼처럼 판단이 어려운 일은 \"누가 먼저라고 하기는 좀 어렵더라고요\"라고 단정하지 않습니다.","written_tips":"\"일단은 큰일은 아니고요\" 같은 심각도 먼저 말하기, \"원래 ~한 친구잖아요\" 깔고 \"근데\"로 넘어가기, \"제가 ~할게요\" 다음 \"~주시면 좋을 것 같아요\" 순서와 \"~거든요\" 어미는 남깁니다. \"네네\", \"그쵸\", \"아니에요\" 같은 맞장구와 \"지금 잠깐 통화 괜찮으세요?\"는 통화에서만 의미가 있으니 빼고, 문자에서는 \"좀\", \"되게\"를 한 문장에 한 번 정도로 줄입니다.","signature":[{"phrase":"다름이 아니라 ~ 말씀드리려고 전화드렸거든요","usage":"인사 직후 용건을 처음 꺼낼 때"},{"phrase":"일단은 큰일은 아니고요 / 일단은 다친 데는 없고요","usage":"안 좋은 소식의 내용을 말하기 전에 심각도부터 정리할 때"},{"phrase":"~하실까 봐 먼저 말씀드려요","usage":"학부모가 놀라거나 걱정할 것을 짐작해 미리 안심시킬 때"},{"phrase":"원래 ~한 친구잖아요","usage":"문제나 칭찬을 말하기 전에 아이의 평소 모습을 깔아 둘 때"},{"phrase":"한 번만 ~해 주시면 좋을 것 같아요","usage":"집에서 해 줄 일을 부탁할 때"},{"phrase":"제가 ~ 좀 더 챙겨볼게요 / 지켜보고요","usage":"부탁하기 전에 교사가 먼저 할 일을 약속할 때"},{"phrase":"아니에요, 어머님","usage":"학부모의 사과나 걱정을 받아 줄 때"},{"phrase":"그럼 또 연락드릴게요","usage":"통화를 마무리할 때"}],"never":["합쇼체 '~습니다/~습니까' 어미","반말 어미 '~해/~야'","공문 투 '~하시기 바랍니다', '협조 부탁드립니다'","학생을 '자녀분'이나 '학생'이라고 부르는 말"]},"qualitative_error":null,"custom":{"always":[],"banned":[],"notes":"","emoji":false},"summary":["문장 끝: ~거든요 17% · ~어요/아요 11% · ~(으)ㄹ게요 10% · ~세요 8% · ~고요 8% · ~더라고요 8% · ~것 같아요 8%  (해요체 93%, 합쇼체 '~습니다' 0%)","한 호흡(끊어 말하는 단위) 길이: 평균 6.3어절, 대부분 4~8어절 · \"네네\" 같은 한두 마디 반응 30% · 12어절 넘게 길게 잇는 말 2%","말머리·연결: \"일단은\"(6회) · \"사실\"(5회) · \"근데\"(4회) · \"그럼\"(3회) · \"그래서\"(2회) · \"그리고\"(2회) · \"다름이 아니라\"(2회)","맞장구·반응: \"네네\"(5회) · \"네(말머리)\"(4회) · \"그쵸\"(3회) · \"아니에요\"(3회) · \"아(말머리)\"(2회)","정도·강조 부사: \"좀\"(10회) · \"되게\"(5회) · \"잠깐\"(4회)","부탁·완충 표현: \"말씀드리~\"(5회) · \"~주시면\"(4회) · \"~면 좋을 것 같아요\"(3회) · \"한 번만\"(3회) · \"괜찮으세요\"(3회) · \"~실까 봐\"(2회) · \"혹시\"(2회)","학부모 호칭: \"어머님\"(9회) · \"아버님\"(4회)","학생 지칭: {학생}이(이름+이)(10회) · 친구(학생을 '친구'라 부름)(7회) · 애(1회)","입에 붙은 구절: \"지금 잠깐 통화 괜찮으세요\"(3회) · \"것 같아요\"(5회) · \"그럼 또 연락드릴게요\"(3회) · \"한 번만\"(3회) · \"좋을 것\"(3회)","질문으로 끝나는 문장: 4%"]},"prompt":"당신은 김도윤 선생님(가상중학교 2학년 담임교사)이 학부모에게 보낼 글과 통화 대본을 대신 써 주는 대필자입니다.\n\n이 일의 성패는 하나로 갈립니다. 받는 학부모가, 그리고 선생님 본인이 읽었을 때 \"선생님이 직접 한 말\"로 느껴지는가입니다. 선생님은 기존 AI 도구의 글이 매끄럽기만 하고 자기 말 같지 않아서 쓰지 않았습니다. 그러니 문장을 다듬어 더 좋은 글로 만들려 하지 마세요. 조금 투박해도 이 선생님이 평소 통화에서 하는 말이 정답입니다.\n\n# 이 선생님의 말투\n선생님의 실제 학부모 통화 3건, 교사 발화 83문장에서 직접 세어 본 습관입니다(자료량: 보통).\n- 문장 끝: ~거든요 17% · ~어요/아요 11% · ~(으)ㄹ게요 10% · ~세요 8% · ~고요 8% · ~더라고요 8% · ~것 같아요 8%  (해요체 93%, 합쇼체 '~습니다' 0%)\n- 한 호흡(끊어 말하는 단위) 길이: 평균 6.3어절, 대부분 4~8어절 · \"네네\" 같은 한두 마디 반응 30% · 12어절 넘게 길게 잇는 말 2%\n- 말머리·연결: \"일단은\"(6회) · \"사실\"(5회) · \"근데\"(4회) · \"그럼\"(3회) · \"그래서\"(2회) · \"그리고\"(2회) · \"다름이 아니라\"(2회)\n- 맞장구·반응: \"네네\"(5회) · \"네(말머리)\"(4회) · \"그쵸\"(3회) · \"아니에요\"(3회) · \"아(말머리)\"(2회)\n- 정도·강조 부사: \"좀\"(10회) · \"되게\"(5회) · \"잠깐\"(4회)\n- 부탁·완충 표현: \"말씀드리~\"(5회) · \"~주시면\"(4회) · \"~면 좋을 것 같아요\"(3회) · \"한 번만\"(3회) · \"괜찮으세요\"(3회) · \"~실까 봐\"(2회) · \"혹시\"(2회)\n- 학부모 호칭: \"어머님\"(9회) · \"아버님\"(4회)\n- 학생 지칭: {학생}이(이름+이)(10회) · 친구(학생을 '친구'라 부름)(7회) · 애(1회)\n- 입에 붙은 구절: \"지금 잠깐 통화 괜찮으세요\"(3회) · \"것 같아요\"(5회) · \"그럼 또 연락드릴게요\"(3회) · \"한 번만\"(3회) · \"좋을 것\"(3회)\n- 질문으로 끝나는 문장: 4%\n- 한 줄 인상: 용건을 말하기 전에 \"큰일은 아니고요\", \"다친 데는 없고요\"처럼 걱정할 일인지부터 먼저 정리해 주고, 이야기는 언제나 \"제가 ~할게요\" 다음에 \"~해 주시면 좋을 것 같아요\"로 마무리합니다.\n- 소식을 꺼내는 순서: 통화 가능 여부를 묻고(\"지금 잠깐 통화 괜찮으세요?\") \"다름이 아니라\"로 용건을 한 줄 꺼낸 뒤, 바로 심각도를 정리하고(\"일단은 큰일은 아니고요\") 사실 설명, 원인, 교사가 할 일, 학부모에게 부탁, \"다시 연락드릴게요\" 순서로 갑니다. 좋은 소식일 때도 \"좋은 일로 전화드렸거든요. 일단은 안심하셔도 돼요\"처럼 안심부터 시킵니다.\n- 걱정되는 일을 전할 때: 문제를 말하기 전에 아이의 원래 좋은 모습을 \"원래 ~한 친구잖아요\"로 깔아 두고, \"근데\"로 넘어가 \"좀\"을 붙여 문제를 말합니다(\"근데 2주 정도 숙제를 좀 안 해오더라고요\"). 이어서 \"서로 밀치거나 그런 건 전혀 없었고요\", \"아직 걱정하실 정도는 아니고요\"처럼 어디까지는 아니라고 선을 그어 줍니다.\n- 칭찬할 때: \"준비를 되게 꼼꼼하게 해왔더라고요\", \"설명도 차분하게 잘했고요\"처럼 직접 본 행동을 \"되게\"를 넣어 구체적으로 말하고, \"과학 선생님도 따로 칭찬을 하시더라고요\"처럼 다른 사람의 평가를 덧붙입니다. 칭찬을 전하는 이유도 함께 말합니다(\"자기 자랑을 잘 안 하는 친구잖아요. 그래서 제가 어머님께 꼭 말씀드리고 싶었거든요\").\n- 부탁할 때: 부탁하기 전에 교사가 먼저 할 일을 말하고(\"제가 이번 주까지는 숙제 검사할 때 {학생}이를 좀 더 챙겨볼게요\"), 부탁은 \"한 번만\"과 \"편하게\"로 부담을 줄여 \"~주시면 좋을 것 같아요\"로 맺습니다(\"한 번만 편하게 물어봐 주시면 좋을 것 같아요\"). 행정 안내는 \"보내주시면 돼요\", \"편하신 쪽으로 하시면 돼요\"처럼 선택지를 열어 둡니다.\n- 공감·안심시키는 방식: 학부모가 놀랄 것을 미리 짐작해 \"어머님 놀라실까 봐 먼저 말씀드려요\", \"아버님 걱정하실까 봐 먼저 말씀드려요\"라고 먼저 짚고, 학부모의 사과나 걱정에는 \"아니에요, 어머님\"으로 받은 뒤 아이의 평소 성품을 근거로 안심시킵니다(\"워낙 성실한 친구라서 금방 돌아올 거예요\", \"저는 크게 걱정은 안 하거든요\").\n- 설명하는 방식: \"2주 정도\", \"3번 정도 빠졌거든요\", \"반에서 중상위권이었거든요\"처럼 횟수·기간·위치를 대략적인 숫자로 짚고, 원인은 \"제가 {학생}이랑 어제 잠깐 얘기를 해봤는데요\", \"제가 양쪽 얘기를 다 들어봤는데\"처럼 교사가 직접 확인한 내용으로 설명합니다. 다툼처럼 판단이 어려운 일은 \"누가 먼저라고 하기는 좀 어렵더라고요\"라고 단정하지 않습니다.\n- 글로 옮길 때: \"일단은 큰일은 아니고요\" 같은 심각도 먼저 말하기, \"원래 ~한 친구잖아요\" 깔고 \"근데\"로 넘어가기, \"제가 ~할게요\" 다음 \"~주시면 좋을 것 같아요\" 순서와 \"~거든요\" 어미는 남깁니다. \"네네\", \"그쵸\", \"아니에요\" 같은 맞장구와 \"지금 잠깐 통화 괜찮으세요?\"는 통화에서만 의미가 있으니 빼고, 문자에서는 \"좀\", \"되게\"를 한 문장에 한 번 정도로 줄입니다.\n- 이 선생님다운 표현: \"다름이 아니라 ~ 말씀드리려고 전화드렸거든요\"(인사 직후 용건을 처음 꺼낼 때) / \"일단은 큰일은 아니고요 / 일단은 다친 데는 없고요\"(안 좋은 소식의 내용을 말하기 전에 심각도부터 정리할 때) / \"~하실까 봐 먼저 말씀드려요\"(학부모가 놀라거나 걱정할 것을 짐작해 미리 안심시킬 때) / \"원래 ~한 친구잖아요\"(문제나 칭찬을 말하기 전에 아이의 평소 모습을 깔아 둘 때) / \"한 번만 ~해 주시면 좋을 것 같아요\"(집에서 해 줄 일을 부탁할 때) / \"제가 ~ 좀 더 챙겨볼게요 / 지켜보고요\"(부탁하기 전에 교사가 먼저 할 일을 약속할 때) / \"아니에요, 어머님\"(학부모의 사과나 걱정을 받아 줄 때) / \"그럼 또 연락드릴게요\"(통화를 마무리할 때)\n- 이 선생님이 쓰지 않는 말투: 합쇼체 '~습니다/~습니까' 어미 / 반말 어미 '~해/~야' / 공문 투 '~하시기 바랍니다', '협조 부탁드립니다' / 학생을 '자녀분'이나 '학생'이라고 부르는 말\n\n# 실제 발화\n선생님이 통화에서 실제로 한 말입니다. 위 요약과 아래 발화가 어긋나 보이면 발화를 따르세요. 요약은 발화를 읽는 길잡이일 뿐입니다. {학생} 은 학생 이름 자리이고, 실제 이름을 넣을 때는 받침에 맞게 조사를 고칩니다.\n<실제_발화>\n[통화 시작] 어머님 안녕하세요. {학생}이 담임이에요. 지금 잠깐 통화 괜찮으세요?\n[통화 시작] 아버님 안녕하세요. {학생}이 담임이에요. 지금 잠깐 통화 괜찮으세요?\n[통화 시작] 어머님 안녕하세요. {학생} 담임이에요. 지금 잠깐 통화 괜찮으세요?\n[안심시키기] 네네. 다름이 아니라 {학생}이 요즘 학교 생활 좀 말씀드리려고 전화드렸거든요. 일단은 큰일은 아니고요. 어머님 놀라실까 봐 먼저 말씀드려요.\n[안심시키기] 네네. 다름이 아니라 오늘 학교에서 {학생}이가 친구랑 좀 다툼이 있었거든요. 일단은 다친 데는 없고요. 아버님 걱정하실까 봐 먼저 말씀드려요.\n[안심시키기] 아 아니에요 어머님. 오늘은 좋은 일로 전화드렸거든요. 일단은 안심하셔도 돼요.\n[걱정되는 일 전달] 성적은요. 사실 지난 중간고사 때는 반에서 중상위권이었거든요. 근데 이번 수행평가 점수가 조금 내려가긴 했어요. 그래도 아직 걱정하실 정도는 아니고요. 지금 잡으면 충분히 올라와요.\n[걱정되는 일 전달] 사실 {학생}이가 원래 수업 태도가 되게 좋은 친구잖아요. 근데 2주 정도 숙제를 좀 안 해오더라고요. 수학이랑 영어 쪽에서 3번 정도 빠졌거든요.\n[걱정되는 일 전달] 네네. 그쵸. 근데 {학생}이가 집에 가서 좀 속상해할 수도 있거든요. 그래서 아버님께서 오늘 저녁에 무슨 일 있었냐고 한 번만 편하게 물어봐 주시면 좋을 것 같아요.\n[걱정되는 일 전달] 음, 그게요. 제가 양쪽 얘기를 다 들어봤는데 누가 먼저라고 하기는 좀 어렵더라고요. 둘 다 서운한 게 좀 쌓여 있었던 것 같아요. 일단은 오늘 밤과 후에 둘이 같이 얘기하고 서로 사과는 했거든요.\n[칭찬] 그쵸. {학생}가 원래 자기 자랑을 잘 안 하는 친구잖아요. 그래서 제가 어머님께 꼭 말씀드리고 싶었거든요. 집에서 한 번만 칭찬해 주시면 {학생}가 되게 좋아할 것 같아요.\n[칭찬] 네네. {학생}가 이번에 과학 발표를 했는데요. 준비를 되게 꼼꼼하게 해왔더라고요. 친구들 앞에서 설명도 차분하게 잘했고요. 과학 선생님도 따로 칭찬을 하시더라고요.\n[설명] 같은 반 친구인데요. 사실 둘이 원래 되게 친한 사이잖아요. 근데 점심시간에 모둠 활동 얘기하다가 말이 좀 세게 나왔더라고요. 서로 밀치거나 그런 건 전혀 없었고요.\n[내가 할 일 말하기] 아니에요, 어머님. {학생}이가 워낙 성실한 친구라서 금방 돌아올 거예요. 제가 다음 주에 한 번 더 보고 다시 연락드릴게요.\n[내가 할 일 말하기] 네, 감사해요. 사실 {학생}이가 평소에 친구들을 되게 잘 챙기는 친구라서요. 저는 크게 걱정은 안 하거든요. 제가 이번 주는 둘이 지내는 거 좀 더 지켜보고요. 혹시 또 무슨 일 있으면 바로 연락드릴게요.\n[부탁] 네네. 아무래도 그런 것 같아요. 일단은 제가 이번 주까지는 숙제 검사할 때 {학생}이를 좀 더 챙겨볼게요. 그리고 어머님께서도 집에서 저녁에 한 번만 물어봐 주시면 좋을 것 같아요.\n[부탁] 일단은 다음 주에 가정통신문이 나가거든요. 거기에 가능한 시간을 적어서 보내주시면 돼요. 혹시 직접 오시기 어려우면 전화 상담도 되니까요. 편하신 쪽으로 하시면 돼요.\n[안내] 아니에요. 그리고 하나만 더 말씀드리면요. 다음 달 둘째 주에 학부모 상담 주간이 있거든요. 사실 {학생}는 특별히 걱정되는 건 없는데요. 진로 얘기를 한 번 나눠보면 좋을 것 같아서요.\n[통화 마무리] 네, 어머님. 그럼 또 연락드릴게요. 들어봐세요.\n[통화 마무리] 네, 아버님. 그럼 또 연락드릴게요. 들어가세요.\n[통화 마무리] 네 어머님. 그럼 또 연락드릴게요. 들어가세요.\n<\/실제_발화>\n\n# 쓰는 원칙\n(체험판에서는 여기까지만 보여 줍니다. 설치본에서는 글 쓰는 원칙 8가지와 출력 형식까지 전체가 복사됩니다.)","presets":[{"id":"late","label":"지각 안내 문자","req":{"mode":"initiate","channel":"sms","situation":"attendance","length":"normal","intensity":2,"variants":2,"student":"민준","parent_title":"어머님","parent_message":"","facts":"이번 주 화·목 두 번 지각(8시 50분쯤 등교). 본인은 늦잠이라고 함. 다음 주부터 아침에 제가 교문에서 확인 예정. 집에서 기상 시간 한 번 챙겨봐 달라고 부탁."},"result":{"provider":"claude","variants":[{"text":"어머님 안녕하세요, 민준이 담임 김도윤이에요.\n다름이 아니라 민준이 등교 시간 때문에 연락드렸어요. 일단은 큰일은 아니고요.\n\n이번 주 화요일이랑 목요일에 8시 50분쯤 들어와서 두 번 지각을 했거든요.\n민준이한테 물어보니까 본인은 늦잠을 잤다고 하더라고요.\n\n다음 주부터는 제가 아침에 교문에서 좀 확인해 볼게요.\n어머님께서도 집에서 기상 시간을 한 번만 챙겨봐 주시면 좋을 것 같아요.\n그럼 또 연락드릴게요.","check":{"score":98,"label":"내 말투에 가까움","parts":{"문장 끝":1.0,"격식":0.9,"호칭":1.0,"말버릇":1.0},"habits_found":["일단은","그럼","~주시면","~면 좋을 것 같아요","한 번만","것 같아요"],"tells":[],"notes":[]}},{"text":"어머님 안녕하세요, 민준이 담임 김도윤이에요.\n다름이 아니라 민준이가 이번 주 화요일, 목요일 두 번 지각을 했거든요. 일단은 큰일은 아니고요, 본인은 늦잠이었다고 하더라고요.\n\n다음 주부터 제가 아침에 교문에서 확인해 볼게요. 집에서 기상 시간 한 번만 챙겨봐 주시면 좋을 것 같아요.","check":{"score":98,"label":"내 말투에 가까움","parts":{"문장 끝":1.0,"격식":0.9,"호칭":1.0,"말버릇":1.0},"habits_found":["일단은","~주시면","~면 좋을 것 같아요","한 번만","것 같아요","한 번만"],"tells":[],"notes":[]}}],"revised":false,"notices":["체험판: 이 글은 화면에 적힌 메모와 이 프로그램의 실제 프롬프트로 Claude가 미리 써 둔 결과입니다. 설치본에서는 적은 메모로 그 자리에서 씁니다."]}},{"id":"grade","label":"성적 문의에 답장(카톡)","req":{"mode":"reply","channel":"kakao","situation":"grade","length":"normal","intensity":2,"variants":2,"student":"수아","parent_title":"어머님","parent_message":"선생님 안녕하세요. 수아 엄마예요. 이번 기말 수학 점수가 많이 떨어져서 너무 속상하네요. 학원을 바꿔야 할지 고민인데 학교에서는 어떤지 궁금합니다.","facts":"수아 기말 수학 68점(중간 82점). 서술형에서 많이 틀림. 수업 태도는 변함없이 좋음. 학원 바꾸는 건 제가 판단할 부분 아님. 방학 전에 서술형 오답 같이 볼 예정."},"result":{"provider":"claude","variants":[{"text":"어머님 안녕하세요, 수아 담임 김도윤이에요.\n네, 어머님. 점수 보시고 많이 속상하셨죠.\n\n수아가 원래 수업 태도가 좋은 친구잖아요. 그건 지금도 변함없거든요.\n근데 이번 기말 수학이 68점이라 중간 82점보다는 좀 내려갔어요. 서술형에서 많이 틀렸더라고요.\n\n학원 바꾸는 건 사실 제가 판단해 드릴 부분은 아닌 것 같아요.\n대신 방학 전에 제가 수아랑 서술형 오답을 같이 한 번 볼게요. 그럼 또 연락드릴게요.","check":{"score":95,"label":"내 말투에 가까움","parts":{"문장 끝":0.9,"격식":0.95,"호칭":1.0,"말버릇":1.0},"habits_found":["사실","근데","그럼","것 같아요","그럼 또 연락드릴게요"],"tells":[],"notes":["선생님이 잘 안 쓰는 문장 끝: ~죠"]}},{"text":"어머님 안녕하세요, 수아 담임 김도윤이에요.\n수아가 수업 태도는 지금도 변함없이 좋거든요. 근데 이번 기말 수학은 서술형에서 많이 틀려서 68점이 나왔더라고요.\n\n학원 바꾸는 건 제가 판단해 드릴 부분은 아닌 것 같아요. 대신 방학 전에 제가 수아랑 서술형 오답을 같이 볼게요.","check":{"score":98,"label":"내 말투에 가까움","parts":{"문장 끝":1.0,"격식":0.9,"호칭":1.0,"말버릇":1.0},"habits_found":["근데","것 같아요"],"tells":[],"notes":[]}}],"revised":false,"notices":["체험판: 이 글은 화면에 적힌 메모와 이 프로그램의 실제 프롬프트로 Claude가 미리 써 둔 결과입니다. 설치본에서는 적은 메모로 그 자리에서 씁니다."]}},{"id":"glasses","label":"안경 파손 통화 대본","req":{"mode":"call_script","channel":"call","situation":"friend","length":"normal","intensity":3,"variants":1,"student":"도현","parent_title":"아버님","parent_message":"","facts":"오늘 체육 시간에 도현이가 공을 세게 던져서 같은 반 친구 안경이 부러짐. 고의는 아닌 걸로 보임. 상대 학생 다친 곳은 없음. 상대 부모님께는 제가 오늘 저녁에 먼저 연락드릴 예정. 안경 수리비 관련해서 두 가정이 통화하실 수 있게 연락처 전달해도 되는지 여쭤봐야 함."},"result":{"provider":"claude","variants":[{"text":"아버님 안녕하세요. 도현이 담임이에요. 지금 잠깐 통화 괜찮으세요?\n(학부모 반응)\n네네. 다름이 아니라 오늘 체육 시간에 좀 일이 있어서 전화드렸거든요. 일단은 상대 친구는 다친 데는 없고요. 아버님 걱정하실까 봐 먼저 말씀드려요.\n(학부모 반응)\n도현이가 공을 좀 세게 던졌는데 같은 반 친구 안경이 부러졌거든요. 제가 보기엔 일부러 그런 건 아닌 것 같아요.\n(학부모 반응)\n네. 그래서 일단은 제가 오늘 저녁에 상대 친구 부모님께 먼저 연락드릴게요. 근데 안경 수리비 때문에 두 집이 한 번 통화하실 수 있으면 좋을 것 같아서요. 혹시 아버님 연락처를 그쪽에 전달해 드려도 괜찮으세요?\n(학부모 반응)\n네, 아버님. 그럼 또 연락드릴게요. 들어가세요.","check":{"score":100,"label":"내 말투에 가까움","parts":{"문장 끝":1.0,"격식":0.99,"호칭":1.0,"말버릇":1.0},"habits_found":["일단은","근데","그럼","말씀드리~","~면 좋을 것 같아요","괜찮으세요"],"tells":[],"notes":[]}}],"revised":false,"notices":["체험판: 이 글은 화면에 적힌 메모와 이 프로그램의 실제 프롬프트로 Claude가 미리 써 둔 결과입니다. 설치본에서는 적은 메모로 그 자리에서 씁니다."]}}],"built":"2026-11-21"};
+  D.examples = [];
+  const NO = (what) => { throw new Error("체험판에서는 " + what + " 설치본에서 동작합니다."); };
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  const summary = (r) => {
+    const live = r.units.filter((u) => !u.deleted);
+    return { id: r.id, title: r.title, source: r.source, status: r.status, error: r.error, duration: r.duration,
+      created_at: r.created_at, student_names: r.student_names, n_units: live.length,
+      n_teacher: live.filter((u) => u.speaker === "T").length,
+      n_unsure: live.filter((u) => u.conf <= 0.5 && !u.manual).length };
+  };
+  const norm = (s) => (s || "").replace(/\s+/g, " ").trim();
+  window.MYTONE_DEMO = async (path, opts = {}) => {
+    const method = (opts.method || "GET").toUpperCase(), body = opts.body || {};
+    await wait(120);
+    let m;
+    if (path === "/api/health") return D.health;
+    if (path === "/api/me") { if (method === "DELETE") NO("계정을 지울 수 없습니다."); if (method === "PATCH") Object.assign(D.me, body); return D.me; }
+    if (path === "/api/recordings") { if (method === "POST") NO("녹음을 올릴 수 없습니다."); return D.recordings.map(summary); }
+    if (path === "/api/transcripts") NO("대화록을 추가할 수 없습니다.");
+    if ((m = path.match(/^\/api\/recordings\/([^/]+)\/units$/))) {
+      const r = D.recordings.find((x) => x.id === m[1]);
+      if (body.swap_all) r.units.forEach((u) => { u.speaker = u.speaker === "T" ? "P" : "T"; u.manual = true; });
+      for (const c of body.changes || []) {
+        const u = r.units.find((x) => x.i === c.i); if (!u) continue;
+        if (c.speaker) { u.speaker = c.speaker; u.manual = true; u.conf = 1; }
+        if (c.deleted != null) u.deleted = c.deleted;
+      }
+      return Object.assign(summary(r), { units: r.units });
+    }
+    if ((m = path.match(/^\/api\/recordings\/([^/]+)\/refine$/))) NO("자동 보정을 쓸 수 없습니다.");
+    if ((m = path.match(/^\/api\/recordings\/([^/]+)$/))) {
+      if (method === "DELETE") NO("샘플 통화를 지울 수 없습니다.");
+      const r = D.recordings.find((x) => x.id === m[1]);
+      return Object.assign(summary(r), { units: r.units });
+    }
+    if (path === "/api/profile/build") { await wait(700); return D.profile; }
+    if (path === "/api/profile/custom") { D.profile.custom = body; return D.profile; }
+    if (path === "/api/profile/prompt") return { prompt: D.prompt };
+    if (path === "/api/profile") return D.profile;
+    if (path === "/api/generate") {
+      await wait(900);
+      const p = D.presets.find((x) => norm(x.req.facts) === norm(body.facts));
+      return p ? p.result : { provider: "demo", variants: [], notices: [
+        "체험판은 위의 예시 " + D.presets.length + "개만 보여 줍니다. 예시 버튼을 눌러 주세요. 설치본에서는 적은 메모로 바로 씁니다."] };
+    }
+    if (path === "/api/check") NO("고친 글을 다시 잴 수 없습니다.");
+    if (path === "/api/examples") {
+      if (method === "POST") { D.examples.push({ id: "e" + Date.now(), text: body.text, created_at: "방금" }); return { ok: true, count: D.examples.length }; }
+      return D.examples;
+    }
+    if ((m = path.match(/^\/api\/examples\/(.+)$/))) { D.examples = D.examples.filter((e) => e.id !== m[1]); return { ok: true, count: D.examples.length }; }
+    NO("이 기능을 쓸 수 없습니다.");
+  };
+  window.MYTONE_DEMO_INIT = () => {
+    const mk = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text) n.textContent = text; return n; };
+    const bar = mk("div", "note warn", "체험판입니다. 가상의 교사·학생으로 만든 샘플 데이터로 화면을 보여 줍니다. 녹음을 올려 글로 옮기고 직접 적은 메모로 글을 쓰는 기능은 설치본(서버)에서 동작합니다.");
+    bar.style.margin = "0 0 14px";
+    document.querySelector("main").prepend(bar);
+    document.getElementById("btnLogout").classList.add("hide");
+    const s = document.getElementById("chipStt"), l = document.getElementById("chipLlm");
+    s.textContent = "음성 인식: 체험판"; s.className = "chip warn"; s.title = "";
+    l.textContent = "글쓰기: 체험판(예시)"; l.className = "chip warn"; l.title = "";
+    const box = mk("div", "note");
+    box.append(mk("b", "", "체험판 예시 — 눌러 보세요  "));
+    for (const p of D.presets) {
+      const b = mk("button", "btn small", p.label); b.type = "button"; b.style.margin = "4px 6px 0 0";
+      b.onclick = () => {
+        const r = p.req, set = (id, v) => { document.getElementById(id).value = v; };
+        setMode(r.mode); set("wChannel", r.channel); set("wSituation", r.situation); set("wLength", r.length);
+        set("wIntensity", String(r.intensity)); set("wVariants", String(r.variants)); set("wStudent", r.student);
+        set("wParent", r.parent_title); set("wParentMsg", r.parent_message || ""); set("wFacts", r.facts);
+        document.getElementById("btnGen").click();
+      };
+      box.append(b);
+    }
+    const card = document.querySelector("#tab-write .card");
+    card.insertBefore(box, card.children[1]);
+  };
+})();
+</script>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+    else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+  }
+  for (const kid of kids) if (kid != null) n.append(kid);
+  return n;
+};
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+};
+let token = store.get("mytone_token") || "", me = null, health = null, profile = null, pollTimer = null;
+const openRecs = new Set();
+
+function toast(msg, ms = 2600) {
+  const t = $("toast"); t.textContent = msg; t.classList.remove("hide");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.add("hide"), ms);
+}
+async function api(path, opts = {}) {
+  // 체험판(정적 미리보기)에서는 서버 대신 페이지에 심어 둔 샘플 데이터가 응답한다 — scripts/build_preview.py
+  if (window.MYTONE_DEMO) return window.MYTONE_DEMO(path, opts);
+  const headers = Object.assign({}, opts.headers || {});
+  if (token) headers.Authorization = "Bearer " + token;
+  let body = opts.body;
+  if (body && !(body instanceof FormData)) { headers["Content-Type"] = "application/json"; body = JSON.stringify(body); }
+  const res = await fetch(path, { method: opts.method || "GET", headers, body });
+  let data = null; try { data = await res.json(); } catch {}
+  if (res.status === 401 && token && !path.includes("/login")) { logout(); throw new Error("다시 로그인해 주세요."); }
+  if (!res.ok) {
+    const d = data && data.detail;
+    throw new Error(typeof d === "string" ? d : (Array.isArray(d) ? "입력 내용을 확인해 주세요." : "요청을 처리하지 못했습니다."));
+  }
+  return data;
+}
+function fillSelect(sel, map, value) {
+  sel.replaceChildren(...Object.entries(map).map(([k, v]) => el("option", { value: k, text: v })));
+  if (value) sel.value = value;
+}
+
+/* ── 시작 ── */
+async function boot() {
+  try { health = await api("/api/health"); } catch { health = null; }
+  if (health) {
+    const s = health.stt, l = health.llm;
+    $("chipStt").textContent = s.ready ? "음성 인식 준비됨" : "음성 인식 미준비";
+    $("chipStt").className = "chip" + (s.ready ? "" : " bad");
+    $("chipStt").title = s.ready ? s.model : "ffmpeg 또는 음성 모델이 없습니다. 0_SETUP.bat 을 실행해 주세요.";
+    $("chipLlm").textContent = l.provider === "claude" ? "글쓰기: Claude" : "글쓰기: 데모(키 없음)";
+    $("chipLlm").className = "chip" + (l.provider === "claude" ? "" : " warn");
+    $("chipLlm").title = l.provider === "claude" ? l.model : "서버에 ANTHROPIC_API_KEY 를 넣으면 실제 글쓰기가 켜집니다.";
+    const o = health.options;
+    fillSelect($("aRole"), o.roles, "homeroom"); fillSelect($("sRole"), o.roles);
+    fillSelect($("wChannel"), o.channels, "sms"); fillSelect($("wSituation"), o.situations, "etc");
+    fillSelect($("wLength"), o.lengths, "normal");
+    const MODE_SHORT = { reply: "받은 글에 답장", initiate: "먼저 연락", call_script: "통화 대본", after_call: "통화 후 정리" };
+    $("modeSeg").replaceChildren(...Object.entries(o.modes).map(([k, v], i) =>
+      el("button", { "data-v": k, class: i === 1 ? "on" : "", text: MODE_SHORT[k] || v, title: v, onclick: () => setMode(k) })));
+    // 라벨을 바로 뒤 입력칸과 연결(화면 낭독기·라벨 클릭)
+    document.querySelectorAll("label").forEach((l) => { const n = l.nextElementSibling; if (n && n.id && /^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName)) l.htmlFor = n.id; });
+    setMode("initiate");
+    if (health.invite_required) $("inviteWrap").classList.remove("hide");
+    if (health.keep_audio) $("keepAudioText").textContent = "원본 음성은 서버에 보관됩니다(운영자 설정).";
+  }
+  if (window.MYTONE_DEMO) token = "demo";
+  if (token) { try { me = await api("/api/me"); } catch { me = null; } }
+  if (me) { await showApp(); if (window.MYTONE_DEMO_INIT) window.MYTONE_DEMO_INIT(); } else showAuth();
+}
+function showAuth() {
+  $("viewApp").classList.add("hide"); $("viewAuth").classList.remove("hide");
+  $("btnLogout").classList.add("hide"); $("who").textContent = "";
+}
+function logout() { token = ""; me = null; profile = null; store.del("mytone_token"); clearInterval(pollTimer); showAuth(); }
+$("btnLogout").onclick = logout;
+
+let authMode = "login";
+$("authSeg").onclick = (e) => {
+  const v = e.target.dataset.v; if (!v) return;
+  authMode = v;
+  for (const b of $("authSeg").children) b.classList.toggle("on", b.dataset.v === v);
+  $("signupExtra").classList.toggle("hide", v !== "signup");
+  $("btnAuth").textContent = v === "signup" ? "가입하고 시작" : "로그인";
+  $("authErr").classList.add("hide");
+};
+$("btnAuth").onclick = async () => {
+  const body = { login_id: $("aId").value.trim(), pin: $("aPin").value.trim() };
+  if (authMode === "signup") Object.assign(body, { name: $("aName").value.trim(), role: $("aRole").value,
+    org: $("aOrg").value.trim(), grade: $("aGrade").value.trim(), invite: $("aInvite").value.trim() });
+  try {
+    const r = await api(authMode === "signup" ? "/api/signup" : "/api/login", { method: "POST", body });
+    token = r.token; me = r.teacher; store.set("mytone_token", token); $("aPin").value = ""; showApp();
+  } catch (e) { $("authErr").textContent = e.message; $("authErr").classList.remove("hide"); }
+};
+$("aPin").addEventListener("keydown", (e) => { if (e.key === "Enter" && authMode === "login") $("btnAuth").click(); });
+
+async function showApp() {
+  $("viewAuth").classList.add("hide"); $("viewApp").classList.remove("hide");
+  $("btnLogout").classList.remove("hide"); $("who").textContent = me.name + " 선생님";
+  $("sName").value = me.name || ""; $("sRole").value = me.role || "other"; $("sOrg").value = me.org || ""; $("sGrade").value = me.grade || "";
+  await Promise.all([loadRecs(), loadProfile()]);
+  switchTab(profile ? "write" : "voice");
+}
+function switchTab(t) {
+  for (const b of $("tabs").children) b.classList.toggle("on", b.dataset.t === t);
+  for (const k of ["voice", "card", "write", "set"]) $("tab-" + k).classList.toggle("hide", k !== t);
+  if (t === "set") loadExamples();
+  if (t === "write") $("genHint").textContent = profile ? "" : "먼저 ①에서 말투를 등록해 주세요.";
+}
+$("tabs").onclick = (e) => { if (e.target.dataset.t) switchTab(e.target.dataset.t); };
+
+/* ── ① 녹음 ── */
+const drop = $("drop");
+drop.onclick = () => $("file").click();
+drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
+drop.ondragleave = () => drop.classList.remove("over");
+drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove("over"); upload(e.dataTransfer.files); };
+$("file").onchange = (e) => { upload(e.target.files); e.target.value = ""; };
+let uploading = false;
+async function upload(fileList) {
+  const files = [...fileList];
+  if (!files.length || uploading) return;
+  uploading = true; $("btnPick").disabled = true;
+  const state = $("upState"); state.className = "muted";
+  const failed = [];
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    state.textContent = `올리는 중… (${i + 1}/${files.length}) ${f.name}`;
+    const fd = new FormData(); fd.append("file", f); fd.append("student_names", $("names").value);
+    try { await api("/api/recordings", { method: "POST", body: fd }); loadRecs(); }
+    catch (e) { failed.push(`${f.name}: ${e.message}`); }
+  }
+  uploading = false; $("btnPick").disabled = false;
+  const ok = files.length - failed.length;
+  state.textContent = failed.length ? "올리지 못한 파일 — " + failed.join(" / ") : "";
+  state.className = failed.length ? "note warn" : "muted hide";   // 실패는 눈에 띄게
+  if (ok) toast(`${ok}개 올렸습니다 — 글로 옮기는 중`);
+  loadRecs();
+}
+$("btnPasteToggle").onclick = () => $("pasteBox").classList.toggle("hide");
+$("btnPaste").onclick = async () => {
+  try {
+    await api("/api/transcripts", { method: "POST", body: { text: $("pasteText").value, student_names: $("names").value } });
+    $("pasteText").value = ""; $("pasteBox").classList.add("hide"); toast("추가했습니다"); loadRecs();
+  } catch (e) { toast(e.message, 4000); }
+};
+const fmtDur = (s) => s ? Math.floor(s / 60) + "분 " + Math.round(s % 60) + "초" : "";
+async function loadRecs() {
+  let recs = [];
+  try { recs = await api("/api/recordings"); } catch (e) { return; }
+  $("recCount").textContent = recs.length ? `(${recs.length}개)` : "";
+  const list = $("recList");
+  const busy = recs.some((r) => r.status === "queued" || r.status === "transcribing");
+  clearInterval(pollTimer); if (busy) pollTimer = setInterval(loadRecs, 2500);
+  const done = recs.filter((r) => r.status === "done");
+  $("btnBuild").disabled = !done.length || busy;
+  $("buildHint").textContent = busy ? "글로 옮기는 중입니다…" : (done.length ? (done.length < 3 ? `지금도 분석할 수 있지만, 3개를 권장합니다(현재 ${done.length}개).` : "화자 구분을 확인한 뒤 분석하면 더 정확합니다.") : "통화를 1개 이상 올리면 분석할 수 있습니다.");
+  if (!recs.length) { list.replaceChildren(el("p", { class: "muted", text: "아직 올린 통화가 없습니다." })); return; }
+  const rows = [];
+  for (const r of recs) {
+    const status = r.status === "done" ? el("span", { class: "muted", id: "st-" + r.id, text: recStatus(r) })
+      : r.status === "error" ? el("span", { class: "chip bad", text: r.error || "실패" })
+      : el("span", { class: "muted" }, el("span", { class: "spin" }), " 글로 옮기는 중…");
+    const row = el("div", { class: "rec" }, el("b", { text: r.title }), status);
+    if (r.status === "done") row.append(el("span", { class: "chip warn" + (r.n_unsure ? "" : " hide"), id: "un-" + r.id, text: `확인 권장 ${r.n_unsure}문장` }));
+    row.append(el("span", { class: "spacer" }));
+    if (r.status === "done") row.append(el("button", { class: "btn small", text: openRecs.has(r.id) ? "접기" : "전사 확인·화자 수정", onclick: () => { openRecs.has(r.id) ? openRecs.delete(r.id) : openRecs.add(r.id); loadRecs(); } }));
+    row.append(el("button", { class: "btn small", text: "삭제", onclick: async () => { if (confirm("이 통화 기록을 지울까요?")) { await api("/api/recordings/" + r.id, { method: "DELETE" }); openRecs.delete(r.id); loadRecs(); } } }));
+    rows.push(row);
+    if (openRecs.has(r.id) && r.status === "done") { const box = el("div"); rows.push(box); renderUnits(r.id, box); }
+  }
+  list.replaceChildren(...rows);
+}
+const recStatus = (r) => `${fmtDur(r.duration)}${r.duration ? " · " : ""}선생님 발화 ${r.n_teacher}문장 / 전체 ${r.n_units}문장`;
+async function renderUnits(rid, box) {
+  let rec; try { rec = await api("/api/recordings/" + rid); } catch (e) { box.textContent = e.message; return; }
+  const wrap = el("div", { class: "units" });
+  // 한 문장을 고칠 때마다 목록 전체를 다시 그리면 스크롤 위치를 잃는다 → 이 통화의 줄만 제자리에서 다시 그린다
+  const patch = async (body) => {
+    try {
+      rec = await api(`/api/recordings/${rid}/units`, { method: "PATCH", body });
+      draw();
+      const st = $("st-" + rid), un = $("un-" + rid);
+      if (st) st.textContent = recStatus(rec);
+      if (un) { un.textContent = `확인 권장 ${rec.n_unsure}문장`; un.classList.toggle("hide", !rec.n_unsure); }
+    } catch (e) { toast(e.message); }
+  };
+  const tools = el("p", { class: "muted", style: "display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 0" },
+    el("span", { text: "이름표를 누르면 선생님↔학부모가 바뀝니다. 노란 줄은 자동 추정이 불확실한 문장입니다." }),
+    el("button", { class: "btn small", text: "전체 뒤바꾸기", onclick: () => confirm("선생님과 학부모를 통째로 바꿀까요?") && patch({ swap_all: true }) }));
+  if (health && health.llm.provider === "claude") tools.append(el("button", { class: "btn small", text: "Claude로 화자 다시 확인", onclick: async (e) => {
+    e.target.disabled = true; e.target.textContent = "확인 중…";
+    try { const r = await api(`/api/recordings/${rid}/refine`, { method: "POST" }); toast(`${r.changed}문장 수정됨`); } catch (err) { toast(err.message, 4000); }
+    loadRecs(); } }));
+  function draw() {
+    const top = wrap.scrollTop;
+    wrap.replaceChildren(...rec.units.map((u) => {
+      const unsure = !u.manual && u.conf <= 0.5 && !u.deleted;
+      return el("div", { class: "unit" + (unsure ? " unsure" : "") + (u.deleted ? " del" : "") },
+        el("button", { class: "who " + u.speaker, text: u.speaker === "T" ? "선생님" : "학부모", title: "눌러서 바꾸기",
+          onclick: () => patch({ changes: [{ i: u.i, speaker: u.speaker === "T" ? "P" : "T" }] }) }),
+        el("span", { class: "txt", text: u.text }),
+        el("button", { class: "x", text: u.deleted ? "↺" : "×", title: u.deleted ? "되살리기" : "이 문장은 분석에서 빼기",
+          onclick: () => patch({ changes: [{ i: u.i, deleted: !u.deleted }] }) }));
+    }));
+    wrap.scrollTop = top;
+  }
+  draw();
+  box.replaceChildren(tools, wrap);
+}
+$("btnBuild").onclick = async () => {
+  const b = $("btnBuild"); b.disabled = true; b.textContent = "분석 중…";
+  try { profile = await api("/api/profile/build", { method: "POST", body: { use_llm: true } }); renderProfile(); switchTab("card"); toast("말투 카드를 만들었습니다"); }
+  catch (e) { toast(e.message, 5000); }
+  b.disabled = false; b.textContent = "내 말투 분석하기";
+};
+
+/* ── ② 말투 카드 ── */
+async function loadProfile() { try { profile = await api("/api/profile"); } catch { profile = null; } renderProfile(); }
+const FUNC = { opener: "통화 시작", closer: "통화 마무리", praise: "칭찬", concern: "걱정되는 일", request: "부탁", reassure: "안심시키기", guide: "안내", plan: "내가 할 일", explain: "설명" };
+const QUAL = [["one_line", "한 줄 인상"], ["delivery_order", "소식을 꺼내는 순서"], ["bad_news", "걱정되는 일을 전할 때"], ["praise", "칭찬할 때"], ["request", "부탁할 때"], ["empathy", "공감·안심"], ["explain", "설명하는 방식"], ["written_tips", "글로 옮길 때"]];
+function renderProfile() {
+  $("cardEmpty").classList.toggle("hide", !!profile); $("cardBody").classList.toggle("hide", !profile);
+  if (!profile) return;
+  const st = profile.stats, rel = profile.reliability;
+  $("cardTitle").textContent = (me ? me.name + " 선생님 " : "") + "말투 카드";
+  $("cardMeta").textContent = `${profile.built_at} · 통화 ${st.n_recordings}건 · 선생님 발화 ${st.n_sentences}문장 · 가린 이름: ${(profile.names_masked || []).join(", ") || "없음"}`;
+  $("cardRel").textContent = `자료량 ${rel.level} — ${rel.note}`;
+  $("cardRel").className = "note" + (rel.level === "부족" ? " warn" : "");
+  const ends = st.endings.filter((e) => e.label !== "기타").slice(0, 9), max = Math.max(...ends.map((e) => e.share), 0.01);
+  $("endBars").replaceChildren(...ends.flatMap((e) => [el("span", { text: e.label }),
+    el("div", {}, el("div", { class: "bar", style: `width:${Math.round(e.share / max * 100)}%` })),
+    el("span", { class: "muted", text: Math.round(e.share * 100) + "% (" + e.count + ")" })]));
+  $("sumList").replaceChildren(...(profile.summary || []).slice(1).map((s) => el("li", { text: s })));
+  const q = profile.qualitative;
+  $("qualWrap").classList.toggle("hide", !q);
+  if (q) {
+    const items = QUAL.filter(([k]) => q[k]).map(([k, t]) => el("li", {}, el("b", { text: t + ": " }), q[k]));
+    if (q.signature && q.signature.length) items.push(el("li", {}, el("b", { text: "이 선생님다운 표현: " }), q.signature.map((s) => `"${s.phrase}"(${s.usage})`).join(" / ")));
+    if (q.never && q.never.length) items.push(el("li", {}, el("b", { text: "쓰지 않는 말투: " }), q.never.join(" / ")));
+    $("qualList").replaceChildren(...items);
+  }
+  $("qualNote").textContent = q ? "" : (profile.qualitative_error ? "말하는 방식 분석 실패: " + profile.qualitative_error
+    : "말하는 방식(순서·공감 방식) 분석은 Claude 키가 있을 때 추가됩니다. 위 측정값과 아래 실제 발화만으로도 글쓰기는 됩니다.");
+  $("exCount").textContent = `(${profile.exemplars.length}개)`;
+  $("exList").replaceChildren(...profile.exemplars.map((e) => el("div", { class: "ex" }, el("span", { class: "tag", text: FUNC[e.function] || "설명" }), e.text)));
+  const c = profile.custom || {};
+  $("cAlways").value = (c.always || []).join(", "); $("cBanned").value = (c.banned || []).join(", ");
+  $("cNotes").value = c.notes || ""; $("cEmoji").checked = !!c.emoji;
+}
+const splitList = (s) => s.split(",").map((x) => x.trim()).filter(Boolean);
+$("btnCustom").onclick = async () => {
+  try { profile = await api("/api/profile/custom", { method: "PATCH", body: { always: splitList($("cAlways").value), banned: splitList($("cBanned").value), notes: $("cNotes").value, emoji: $("cEmoji").checked } }); toast("저장했습니다"); }
+  catch (e) { toast(e.message); }
+};
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; }
+  catch { const t = el("textarea"); t.value = text; document.body.append(t); t.select(); const ok = document.execCommand("copy"); t.remove(); return ok; }
+}
+async function getExport() { const r = await api("/api/profile/prompt"); $("exportText").value = r.prompt; return r.prompt; }
+$("btnExport").onclick = async () => { try { toast(await copyText(await getExport()) ? "복사했습니다 — 다른 AI의 지침란에 붙여 넣으세요" : "복사하지 못했습니다. '내용 보기'에서 직접 복사해 주세요"); } catch (e) { toast(e.message); } };
+$("btnExportShow").onclick = async () => { try { await getExport(); $("exportText").classList.toggle("hide"); } catch (e) { toast(e.message); } };
+
+/* ── ③ 글 만들기 ── */
+let mode = "initiate";
+function setMode(m) {
+  mode = m;
+  for (const b of $("modeSeg").children) b.classList.toggle("on", b.dataset.v === m);
+  $("parentMsgWrap").classList.toggle("hide", m !== "reply");
+  if (m === "call_script") $("wChannel").value = "call"; else if ($("wChannel").value === "call") $("wChannel").value = "sms";
+}
+function scoreView(check) {
+  const box = el("div", { style: "margin:8px 0" });
+  if (check.score == null) { box.append(el("span", { class: "muted", text: "일치도를 잴 수 없습니다." })); return box; }
+  const cls = check.score >= 80 ? "" : (check.score >= 62 ? " warn" : " bad");
+  box.append(el("span", { class: "score" }, String(check.score), el("small", { text: "/ 100 · 내 말투 일치도" })), " ", el("span", { class: "chip" + cls, text: check.label }));
+  const parts = Object.entries(check.parts || {}).map(([k, v]) => `${k} ${Math.round(v * 100)}`).join(" · ");
+  if (parts) box.append(el("div", { class: "muted", text: parts + (check.habits_found && check.habits_found.length ? " · 들어간 말버릇: " + check.habits_found.join(", ") : "") }));
+  for (const t of check.tells || []) box.append(el("div", { class: "note bad", text: `AI 티: "${t.match}" (${t.label})` }));
+  for (const n of check.notes || []) box.append(el("div", { class: "note warn", text: n }));
+  return box;
+}
+function resultCard(v, idx, req) {
+  const ta = el("textarea", { style: "min-height:170px" }); ta.value = v.text;
+  const scoreBox = el("div"); scoreBox.append(scoreView(v.check));
+  const recheck = async () => { try { const c = await api("/api/check", { method: "POST", body: { text: ta.value, parent_title: req.parent_title } }); scoreBox.replaceChildren(scoreView(c)); } catch (e) { toast(e.message); } };
+  return el("div", { class: "card" }, el("h2", { text: `${idx + 1}안` }), ta, scoreBox,
+    el("p", { style: "display:flex;gap:8px;flex-wrap:wrap" },
+      el("button", { class: "btn primary small", text: "복사", onclick: async () => toast(await copyText(ta.value) ? "복사했습니다" : "복사 실패") }),
+      el("button", { class: "btn small", text: "고친 글 다시 재기", onclick: recheck }),
+      el("button", { class: "btn small", text: "이 글로 확정(내 말투로 기억)", title: "손본 글을 기준으로 저장합니다. 다음 글부터 반영됩니다.",
+        onclick: async () => { try { const r = await api("/api/examples", { method: "POST", body: { text: ta.value, channel: req.channel, situation: req.situation } }); toast(`확정했습니다(${r.count}개) — 다음 글부터 기준으로 씁니다`); } catch (e) { toast(e.message); } } })));
+}
+$("btnGen").onclick = async () => {
+  if (!profile) { toast("먼저 ①에서 말투를 등록해 주세요."); return; }
+  const req = { mode, channel: $("wChannel").value, situation: $("wSituation").value, length: $("wLength").value,
+    intensity: +$("wIntensity").value, variants: +$("wVariants").value, student: $("wStudent").value.trim(),
+    parent_title: $("wParent").value.trim(), parent_message: mode === "reply" ? $("wParentMsg").value : "", facts: $("wFacts").value };
+  const b = $("btnGen"); b.disabled = true; b.textContent = "쓰는 중…"; $("genHint").textContent = "10~30초 걸립니다.";
+  try {
+    const r = await api("/api/generate", { method: "POST", body: req });
+    $("notices").replaceChildren(...(r.notices || []).map((n) => el("div", { class: "note warn", text: n })));
+    $("results").replaceChildren(...r.variants.map((v, i) => resultCard(v, i, req)));
+    $("genHint").textContent = r.revised ? "초안에서 AI 티를 발견해 한 번 고쳐 썼습니다." : "";
+  } catch (e) { toast(e.message, 5000); $("genHint").textContent = ""; }
+  b.disabled = false; b.textContent = "내 말투로 쓰기";
+};
+
+/* ── 설정 ── */
+$("btnSaveMe").onclick = async () => {
+  try { me = await api("/api/me", { method: "PATCH", body: { name: $("sName").value, role: $("sRole").value, org: $("sOrg").value, grade: $("sGrade").value } }); $("who").textContent = me.name + " 선생님"; toast("저장했습니다"); }
+  catch (e) { toast(e.message); }
+};
+async function loadExamples() {
+  let list = []; try { list = await api("/api/examples"); } catch { return; }
+  $("egCount").textContent = `(${list.length}개)`;
+  $("egList").replaceChildren(...(list.length ? list.map((e) => el("div", { class: "ex" },
+    el("span", { class: "tag", text: e.created_at }), el("span", { style: "white-space:pre-wrap", text: e.text }), " ",
+    el("button", { class: "link", text: "삭제", onclick: async () => { await api("/api/examples/" + e.id, { method: "DELETE" }); loadExamples(); } })))
+    : [el("p", { class: "muted", text: "아직 없습니다." })]));
+}
+$("btnDelete").onclick = async () => {
+  if (!confirm("계정과 모든 데이터(통화 전사·말투 카드·확정한 글)를 지웁니다. 되돌릴 수 없습니다. 계속할까요?")) return;
+  try { await api("/api/me", { method: "DELETE" }); toast("삭제했습니다"); logout(); } catch (e) { toast(e.message); }
+};
+boot();
+</script>
+</body>
+</html>
